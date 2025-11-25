@@ -75,8 +75,8 @@
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto px-4 py-6 space-y-6 pb-24 scroll-smooth" id="teachersContainer">
-            <div id="resumeContainer" class="hidden animate-enter">
+        <main class="flex-1 overflow-y-auto px-4 py-6 space-y-6 pb-24 scroll-smooth">
+            <div id="resumeContainer" class="hidden animate-enter mb-6">
                 <button onclick="resumeLastWatched()" class="w-full bg-white border border-indigo-100 p-4 rounded-2xl shadow-sm flex items-center gap-4 group hover:border-indigo-300 transition-all active:scale-[0.98]">
                     <div class="w-12 h-12 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 relative overflow-hidden group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                         <svg class="w-6 h-6 relative z-10" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -88,10 +88,13 @@
                     </div>
                 </button>
             </div>
+
             <div class="flex flex-col items-center justify-center py-20 text-slate-300 animate-pulse" id="loadingText">
                 <div class="w-8 h-8 border-4 border-slate-200 border-t-indigo-500 rounded-full animate-spin mb-4"></div>
                 <span class="text-sm">جاري جلب المحاضرات...</span>
             </div>
+
+            <div id="dynamicListContainer"></div>
         </main>
     </div>
 
@@ -119,7 +122,7 @@
 
     <script>
         const PASSWORD = "123";
-        let allData = []; // هنا ستبقى فارغة ولن نضع أي بيانات وهمية
+        let allData = [];
         let completedLectures = JSON.parse(localStorage.getItem('hameed_completed_v3')) || [];
         let currentPlayingId = null; 
 
@@ -142,16 +145,17 @@
 
         // ================= دالة الجلب المحدثة =================
         async function loadData() {
+            const loadingText = document.getElementById('loadingText');
             try {
-                // محاولة جلب البيانات من الملف الخارجي فقط
+                // إظهار نص التحميل قبل البدء
+                if(loadingText) loadingText.classList.remove('hidden');
+
                 const response = await fetch('data.json');
-                
                 if (!response.ok) throw new Error('فشل تحميل الملف');
 
                 const rawData = await response.json();
                 
-                // معالجة البيانات: إضافة ID لكل محاضرة تلقائياً لأن ملفك لا يحتوي عليه
-                // الهيكل: المعلم -> الفصول -> المحاضرات
+                // معالجة البيانات وتوليد ID تلقائي
                 allData = rawData.teachers.map((teacher, tIndex) => {
                     return {
                         ...teacher,
@@ -159,8 +163,6 @@
                             return {
                                 ...cls,
                                 lectures: cls.lectures.map((lec, lIndex) => {
-                                    // توليد ID فريد بناء على المواقع (مثال: teacher1_class0_lecture3)
-                                    // هذا يضمن حفظ التقدم حتى لو لم يكن هناك ID في الملف الأصلي
                                     const autoId = lec.id || `${teacher.id || tIndex}_${cIndex}_${lIndex}`;
                                     return { ...lec, id: autoId };
                                 })
@@ -169,7 +171,9 @@
                     };
                 });
 
-                document.getElementById('loadingText').remove();
+                // إخفاء نص التحميل بأمان
+                if(loadingText) loadingText.classList.add('hidden');
+                
                 renderApp();
                 updateStats();
                 checkLastWatched();
@@ -181,15 +185,20 @@
 
             } catch (error) {
                 console.error("Error:", error);
-                document.getElementById('loadingText').innerHTML = `<p class="text-rose-500 font-bold">لم يتم العثور على ملف البيانات (data.json)</p>`;
-                document.getElementById('loadingText').classList.remove('animate-pulse');
+                // التعامل مع الخطأ بأمان
+                if(loadingText) {
+                    loadingText.innerHTML = `<p class="text-rose-500 font-bold">لم يتم العثور على ملف البيانات (data.json)</p>`;
+                    loadingText.classList.remove('animate-pulse', 'hidden');
+                }
             }
         }
 
         function renderApp() {
-            const container = document.getElementById('teachersContainer');
-            container.innerHTML = ''; // تنظيف الحاوية لضمان عدم تكرار العناصر
-            document.getElementById('resumeContainer').classList.remove('hidden'); // إعادة زر الاستكمال إن وجد
+            // نستخدم الحاوية الجديدة بدلاً من مسح الصفحة بالكامل
+            const container = document.getElementById('dynamicListContainer');
+            if(!container) return; // حماية إضافية
+
+            container.innerHTML = ''; // تنظيف القائمة فقط
 
             if (allData.length === 0) {
                 container.innerHTML = '<p class="text-center text-slate-400 mt-10">لا توجد بيانات لعرضها</p>';
@@ -248,9 +257,6 @@
                     <div class="p-2">${classesHtml}</div>`;
                 container.appendChild(teacherSection);
             });
-            // إعادة زر الاستكمال للأعلى
-            const resumeBtn = document.getElementById('resumeContainer');
-            container.insertBefore(resumeBtn, container.firstChild);
         }
 
         function openPlayer(title, url, id) {
@@ -317,7 +323,7 @@
             const count = completedLectures.length;
             const percent = total === 0 ? 0 : Math.round((count / total) * 100);
             const circle = document.getElementById('progressCircle');
-            circle.style.setProperty('--progress', `${percent * 3.6}deg`);
+            if(circle) circle.style.setProperty('--progress', `${percent * 3.6}deg`);
             document.getElementById('percentageText').innerText = `${percent}%`;
             document.getElementById('statsRatio').innerText = `${count}/${total}`;
             const badge = document.getElementById('statusBadge');
@@ -329,9 +335,10 @@
         function checkLastWatched() {
             const last = JSON.parse(localStorage.getItem('hameed_lastWatched'));
             const container = document.getElementById('resumeContainer');
-            if (last) {
+            if (last && container) {
                 container.classList.remove('hidden');
-                document.getElementById('resumeTitle').innerText = last.title;
+                const titleElem = document.getElementById('resumeTitle');
+                if(titleElem) titleElem.innerText = last.title;
             }
         }
 
@@ -342,6 +349,7 @@
 
         function triggerConfetti() {
             const canvas = document.getElementById('confetti-canvas');
+            if(!canvas) return;
             const ctx = canvas.getContext('2d');
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
             const particles = [];

@@ -98,20 +98,23 @@
         </main>
     </div>
 
-    <div id="videoModal" class="fixed inset-0 z-[100] bg-black hidden flex flex-col opacity-0 transition-opacity duration-500">
+    <div id="videoModal" class="fixed inset-0 z-[100] bg-black hidden flex flex-col opacity-0 transition-opacity duration-500 **h-screen w-screen**">
         <div class="absolute inset-0 opacity-30"><div class="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-indigo-900/40 to-transparent"></div></div>
+        
         <div class="relative z-20 flex justify-between items-center p-4 sm:p-6 w-full bg-gradient-to-b from-black/80 to-transparent">
             <div class="flex-1 pr-4"><h2 class="text-white font-bold text-base sm:text-lg line-clamp-1" id="modalTitle">عنوان المحاضرة</h2></div>
             <button onclick="closeVideoModal()" class="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-full p-2.5 transition active:scale-90 border border-white/5">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
         </div>
+
         <div class="flex-1 flex items-center justify-center w-full px-0 sm:px-6 relative z-10 overflow-hidden">
             <div class="video-glow"></div>
-            <div class="w-full max-w-5xl video-wrapper bg-slate-900 border border-white/10 shadow-2xl ring-1 ring-white/5">
+            <div class="w-full video-wrapper bg-slate-900 border border-white/10 shadow-2xl ring-1 ring-white/5">
                 <div id="videoContainer" class="absolute inset-0 flex items-center justify-center text-slate-600"></div>
             </div>
         </div>
+        
         <div class="relative z-20 p-6 pb-10 w-full flex justify-center gap-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
             <button id="markCompleteBtn" onclick="completeFromPlayer()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-lg shadow-indigo-600/30 flex items-center gap-2 transition transform active:scale-95">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
@@ -143,11 +146,9 @@
 
         function logout() { localStorage.removeItem('hameed_loggedIn'); location.reload(); }
 
-        // ================= دالة الجلب المحدثة =================
         async function loadData() {
             const loadingText = document.getElementById('loadingText');
             try {
-                // إظهار نص التحميل قبل البدء
                 if(loadingText) loadingText.classList.remove('hidden');
 
                 const response = await fetch('data.json');
@@ -155,7 +156,6 @@
 
                 const rawData = await response.json();
                 
-                // معالجة البيانات وتوليد ID تلقائي
                 allData = rawData.teachers.map((teacher, tIndex) => {
                     return {
                         ...teacher,
@@ -171,7 +171,6 @@
                     };
                 });
 
-                // إخفاء نص التحميل بأمان
                 if(loadingText) loadingText.classList.add('hidden');
                 
                 renderApp();
@@ -185,7 +184,6 @@
 
             } catch (error) {
                 console.error("Error:", error);
-                // التعامل مع الخطأ بأمان
                 if(loadingText) {
                     loadingText.innerHTML = `<p class="text-rose-500 font-bold">لم يتم العثور على ملف البيانات (data.json)</p>`;
                     loadingText.classList.remove('animate-pulse', 'hidden');
@@ -194,11 +192,10 @@
         }
 
         function renderApp() {
-            // نستخدم الحاوية الجديدة بدلاً من مسح الصفحة بالكامل
             const container = document.getElementById('dynamicListContainer');
-            if(!container) return; // حماية إضافية
+            if(!container) return;
 
-            container.innerHTML = ''; // تنظيف القائمة فقط
+            container.innerHTML = '';
 
             if (allData.length === 0) {
                 container.innerHTML = '<p class="text-center text-slate-400 mt-10">لا توجد بيانات لعرضها</p>';

@@ -3,209 +3,314 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>منصة حميد التعليمية</title>
+    <title>منصة حميد | مكانك للنجاح</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Tajawal', 'sans-serif'] },
+                    colors: {
+                        'brand': { 50: '#f5f3ff', 100: '#ede9fe', 500: '#8b5cf6', 600: '#7c3aed', 900: '#4c1d95' },
+                        'accent': { 500: '#06b6d4' }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        :root { --primary: #4f46e5; --secondary: #06b6d4; --dark: #0f172a; }
-        body { font-family: 'Tajawal', sans-serif; background-color: #f0f4f8; -webkit-tap-highlight-color: transparent; }
-        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-enter { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        ::-webkit-scrollbar { width: 4px; }
+        body { background: #f3f4f6; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
+        
+        /* تأثير الزجاج */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.05);
+        }
+
+        /* حركات الدخول */
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-enter { animation: slideInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; opacity: 0; }
+
+        /* سكرول بار مرتب */
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 16px; box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.5); background: #000; }
-        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .video-glow { position: absolute; width: 100%; height: 100%; background: radial-gradient(circle, rgba(79, 70, 229, 0.15) 0%, rgba(0,0,0,0) 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: -1; }
-        .checkbox-wrapper input:checked + div { background-color: #10b981; border-color: #10b981; transform: scale(1.1); }
-        .checkbox-wrapper input:checked + div svg { stroke-dashoffset: 0; }
-        details > summary { list-style: none; }
-        details > summary::-webkit-details-marker { display: none; }
-        details[open] summary ~ * { animation: slideUp 0.3s ease-out; }
-        details[open] summary .arrow-icon { transform: rotate(180deg); }
-        .progress-circle { width: 60px; height: 60px; border-radius: 50%; background: conic-gradient(var(--primary) var(--progress), #e2e8f0 0deg); display: flex; align-items: center; justify-content: center; position: relative; }
-        .progress-circle::before { content: ""; position: absolute; width: 50px; height: 50px; background: white; border-radius: 50%; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 20px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* الوان وانماط اضافية */
+        .gradient-text { background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .card-hover:active { transform: scale(0.98); }
+        
+        /* تخصيص المشغل */
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 20px; background: #000; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+        /* زر التشيك بوكس */
+        .checkbox-bounce { transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        input:checked + .custom-checkbox { background-color: #10b981; border-color: #10b981; transform: scale(1.1); }
+        input:checked + .custom-checkbox svg { stroke-dashoffset: 0; }
+        .custom-checkbox svg { stroke-dasharray: 18; stroke-dashoffset: 18; transition: stroke-dashoffset 0.3s ease; }
+
+        /* البحث */
+        .search-input:focus-within { box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15); border-color: #8b5cf6; }
     </style>
 </head>
-<body class="text-slate-800 bg-slate-100 h-[100dvh] overflow-hidden flex flex-col selection:bg-indigo-200">
+<body class="text-slate-800 h-[100dvh] flex flex-col bg-[url('https://img.freepik.com/free-vector/white-abstract-background-design_23-2148825582.jpg?w=1380&t=st=1701350000~exp=1701350600~hmac=...')] bg-cover bg-center bg-fixed">
 
     <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-[100]"></canvas>
 
-    <div id="loginScreen" class="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-[#0f172a] transition-all duration-700">
+    <div id="loginScreen" class="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-slate-900/95 backdrop-blur-xl transition-all duration-700">
         <div class="relative w-full max-w-sm p-8 text-center animate-enter z-10">
-            <div class="w-24 h-24 mx-auto mb-8 bg-gradient-to-tr from-indigo-500 to-cyan-400 rounded-[2rem] shadow-2xl shadow-indigo-500/30 flex items-center justify-center rotate-3 hover:rotate-6 transition-transform duration-300">
-                <span class="text-5xl">🎓</span>
+            <div class="w-28 h-28 mx-auto mb-6 bg-gradient-to-tr from-brand-600 to-accent-500 rounded-[2.5rem] shadow-2xl shadow-brand-500/40 flex items-center justify-center rotate-6 hover:rotate-0 transition-all duration-500 cursor-pointer group">
+                <i class="fa-solid fa-graduation-cap text-5xl text-white group-hover:scale-110 transition-transform"></i>
             </div>
-            <h1 class="text-3xl font-black text-white mb-2 tracking-tight">منصة حميد</h1>
-            <p class="text-slate-400 mb-10 text-sm">الإصدار المطور</p>
+            
+            <h1 class="text-4xl font-black text-white mb-2 tracking-tight">منصة حميد</h1>
+            <p class="text-slate-400 mb-10 text-base font-medium">المكان الصح.. للنجاح الصح 🔥</p>
+            
             <div class="space-y-4">
                 <div class="relative group">
-                    <input type="password" id="passwordInput" placeholder="الرمز السري (123)" class="w-full p-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:bg-white/10 focus:border-indigo-500/50 transition-all text-center text-lg tracking-widest">
+                    <input type="password" id="passwordInput" placeholder="اكتب الرمز هنا (123)" 
+                        class="w-full p-4 bg-white/10 border border-white/10 rounded-2xl text-white placeholder-slate-400 focus:outline-none focus:bg-white/15 focus:border-brand-500/50 transition-all text-center text-xl tracking-widest font-bold">
+                    <div class="absolute inset-0 rounded-2xl bg-brand-500/20 blur-lg -z-10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
-                <button onclick="checkLogin()" class="w-full bg-gradient-to-r from-indigo-600 to-cyan-600 text-white font-bold py-4 rounded-2xl shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2">
-                    <span>دخول</span>
+                
+                <button onclick="checkLogin()" class="w-full bg-gradient-to-r from-brand-600 to-accent-500 text-white font-bold py-4 rounded-2xl shadow-lg shadow-brand-600/30 hover:shadow-brand-600/50 hover:-translate-y-1 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3 text-lg">
+                    <span>طب للمنصة</span>
+                    <i class="fa-solid fa-arrow-left"></i>
                 </button>
             </div>
-            <p id="errorMsg" class="text-rose-400 mt-6 text-sm font-medium hidden opacity-0 transition-opacity">🚫 الرمز غير صحيح</p>
+            
+            <div id="errorMsg" class="mt-6 hidden animate-bounce">
+                <div class="bg-rose-500/10 border border-rose-500/20 text-rose-400 px-4 py-2 rounded-xl text-sm font-bold inline-flex items-center gap-2">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span>الرمز غلط أغاتي، تأكد منه!</span>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="appScreen" class="hidden h-full flex flex-col relative w-full max-w-lg mx-auto bg-[#f8fafc] shadow-2xl sm:border-x border-slate-200">
-        <header class="bg-white pt-6 pb-4 px-5 z-20 sticky top-0 border-b border-slate-100/80 backdrop-blur-md bg-white/80">
-            <div class="flex justify-between items-center mb-6">
-                <div class="flex items-center gap-3">
-                    <div class="bg-indigo-50 p-2 rounded-xl"><span class="text-2xl">👋</span></div>
-                    <div><h1 class="text-lg font-black text-slate-800" id="greetingMsg">أهلاً بك</h1><p class="text-xs text-slate-400 font-medium" id="dateDisplay">--</p></div>
+    <div id="appScreen" class="hidden h-full flex flex-col relative w-full max-w-xl mx-auto glass-panel shadow-2xl sm:border-x sm:border-white/50 h-screen">
+        
+        <header class="px-6 pt-8 pb-4 z-20 sticky top-0 bg-white/80 backdrop-blur-xl border-b border-white/50">
+            <div class="flex justify-between items-start mb-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center text-2xl shadow-sm border border-brand-100">👋</div>
+                    <div>
+                        <h1 class="text-xl font-black text-slate-800" id="greetingMsg">هلا والله!</h1>
+                        <p class="text-xs text-slate-500 font-bold mt-1 bg-slate-100 inline-block px-2 py-1 rounded-lg" id="dateDisplay">--</p>
+                    </div>
                 </div>
-                <button onclick="logout()" class="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                <button onclick="logout()" class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center shadow-sm border border-rose-100" title="تسجيل خروج">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 </button>
             </div>
-            <div class="bg-gradient-to-br from-indigo-600 to-violet-600 rounded-3xl p-5 text-white shadow-xl shadow-indigo-500/20 relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
+
+            <div class="bg-gradient-to-br from-brand-600 to-indigo-700 rounded-[2rem] p-6 text-white shadow-xl shadow-brand-500/20 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-white/20 transition-colors"></div>
+                <div class="absolute bottom-0 left-0 w-32 h-32 bg-accent-500/20 rounded-full blur-2xl -ml-10 -mb-10"></div>
+                
                 <div class="flex justify-between items-center relative z-10">
                     <div>
-                        <p class="text-indigo-200 text-xs font-medium mb-1">نسبة الإنجاز</p>
-                        <h2 class="text-3xl font-black mb-1" id="percentageText">0%</h2>
-                        <span id="statusBadge" class="text-[10px] bg-white/20 px-2 py-0.5 rounded-lg text-white">بداية موفقة</span>
+                        <p class="text-brand-100 text-xs font-bold mb-2 uppercase tracking-wider">همتك بالدراسة</p>
+                        <div class="flex items-baseline gap-1">
+                            <h2 class="text-4xl font-black" id="percentageText">0%</h2>
+                            <span class="text-sm font-medium opacity-80">إنجاز</span>
+                        </div>
+                        <div class="mt-3 inline-flex items-center gap-1.5 bg-white/20 px-3 py-1 rounded-full text-[10px] backdrop-blur-sm border border-white/10">
+                            <i class="fa-solid fa-fire text-yellow-300 animate-pulse"></i>
+                            <span id="statusBadge">بداية الطريق</span>
+                        </div>
                     </div>
-                    <div class="progress-circle shadow-lg" id="progressCircle" style="--progress: 0deg;"><span class="relative z-10 text-indigo-600 font-bold text-sm" id="statsRatio">0/0</span></div>
+                    <div class="relative w-16 h-16 flex items-center justify-center">
+                        <svg class="w-full h-full transform -rotate-90">
+                            <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="6" fill="transparent" class="text-black/20" />
+                            <circle id="progressCirclePath" cx="32" cy="32" r="28" stroke="white" stroke-width="6" fill="transparent" stroke-dasharray="175.9" stroke-dashoffset="175.9" stroke-linecap="round" class="transition-all duration-1000 ease-out" />
+                        </svg>
+                        <span class="absolute text-xs font-bold" id="statsRatio">0/0</span>
+                    </div>
                 </div>
+            </div>
+
+            <div class="mt-6 relative search-input transition-all duration-300 rounded-2xl bg-white border border-slate-200">
+                <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" id="searchInput" placeholder="دور على المحاضرة اللي تريدها..." 
+                    class="w-full py-3.5 pr-12 pl-4 bg-transparent focus:outline-none text-slate-700 font-bold placeholder-slate-400 text-sm rounded-2xl">
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto px-4 py-6 space-y-6 pb-24 scroll-smooth">
-            <div id="resumeContainer" class="hidden animate-enter mb-6">
-                <button onclick="resumeLastWatched()" class="w-full bg-white border border-indigo-100 p-4 rounded-2xl shadow-sm flex items-center gap-4 group hover:border-indigo-300 transition-all active:scale-[0.98]">
-                    <div class="w-12 h-12 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 relative overflow-hidden group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                        <svg class="w-6 h-6 relative z-10" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                        <div class="absolute inset-0 bg-indigo-200/50 animate-ping opacity-75"></div>
+        <main class="flex-1 overflow-y-auto px-6 py-4 pb-32 space-y-6 scroll-smooth" id="mainContent">
+            
+            <div id="resumeContainer" class="hidden animate-enter">
+                <button onclick="resumeLastWatched()" class="w-full bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex items-center gap-4 group hover:border-brand-300 hover:shadow-md transition-all">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center text-brand-600 relative overflow-hidden group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-play text-xl ml-1 relative z-10"></i>
+                        <div class="absolute inset-0 bg-brand-200/50 animate-ping opacity-0 group-hover:opacity-100"></div>
                     </div>
-                    <div class="text-right flex-1">
-                        <span class="block text-[10px] text-indigo-500 font-bold uppercase tracking-wider mb-1">استكمال المشاهدة</span>
-                        <span class="block text-sm font-bold text-slate-800 line-clamp-1" id="resumeTitle">...</span>
+                    <div class="text-right flex-1 min-w-0">
+                        <span class="block text-[10px] text-brand-500 font-extrabold uppercase tracking-wider mb-1">وين ما وكفت</span>
+                        <span class="block text-sm font-bold text-slate-800 truncate" id="resumeTitle">...</span>
                     </div>
+                    <i class="fa-solid fa-chevron-left text-slate-300 text-sm"></i>
                 </button>
             </div>
 
-            <div class="flex flex-col items-center justify-center py-20 text-slate-300 animate-pulse" id="loadingText">
-                <div class="w-8 h-8 border-4 border-slate-200 border-t-indigo-500 rounded-full animate-spin mb-4"></div>
-                <span class="text-sm">جاري جلب المحاضرات...</span>
+            <div class="flex flex-col items-center justify-center py-20 text-slate-400" id="loadingText">
+                <i class="fa-solid fa-circle-notch fa-spin text-3xl text-brand-500 mb-4"></i>
+                <span class="text-sm font-medium">دا نحمل المحاضرات.. اصبرلنا شوية</span>
             </div>
 
             <div id="dynamicListContainer"></div>
         </main>
     </div>
 
-    <div id="videoModal" class="fixed inset-0 z-[100] bg-black hidden flex flex-col opacity-0 transition-opacity duration-500 **h-screen w-screen**">
-        <div class="absolute inset-0 opacity-30"><div class="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-indigo-900/40 to-transparent"></div></div>
+    <div id="videoModal" class="fixed inset-0 z-[100] bg-slate-900 hidden flex flex-col opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
         
-        <div class="relative z-20 flex justify-between items-center p-4 sm:p-6 w-full bg-gradient-to-b from-black/80 to-transparent">
-            <div class="flex-1 pr-4"><h2 class="text-white font-bold text-base sm:text-lg line-clamp-1" id="modalTitle">عنوان المحاضرة</h2></div>
-            <button onclick="closeVideoModal()" class="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-full p-2.5 transition active:scale-90 border border-white/5">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        <div class="relative z-20 flex justify-between items-center p-6 w-full bg-gradient-to-b from-black/80 to-transparent">
+            <div class="flex-1 pr-4">
+                <span class="text-xs text-brand-400 font-bold block mb-1">دا تباوع هسة</span>
+                <h2 class="text-white font-bold text-base sm:text-lg line-clamp-1 leading-snug" id="modalTitle">عنوان المحاضرة</h2>
+            </div>
+            <button onclick="closeVideoModal()" class="w-10 h-10 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-full flex items-center justify-center transition active:scale-90 border border-white/10">
+                <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
 
-        <div class="flex-1 flex items-center justify-center w-full px-0 sm:px-6 relative z-10 overflow-hidden">
-            <div class="video-glow"></div>
-            <div class="w-full video-wrapper bg-slate-900 border border-white/10 shadow-2xl ring-1 ring-white/5">
-                <div id="videoContainer" class="absolute inset-0 flex items-center justify-center text-slate-600"></div>
+        <div class="flex-1 flex items-center justify-center w-full px-0 sm:px-4 relative z-10">
+            <div class="w-full max-w-4xl video-container border border-white/10 ring-1 ring-white/5">
+                <div id="videoContainer" class="absolute inset-0 flex items-center justify-center text-slate-500">
+                    </div>
             </div>
         </div>
         
-        <div class="relative z-20 p-6 pb-10 w-full flex justify-center gap-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
-            <button id="markCompleteBtn" onclick="completeFromPlayer()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-lg shadow-indigo-600/30 flex items-center gap-2 transition transform active:scale-95">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                <span>إتمام المحاضرة</span>
+        <div class="relative z-20 p-8 w-full flex justify-center bg-gradient-to-t from-black/95 via-black/80 to-transparent pb-12">
+            <button id="markCompleteBtn" onclick="completeFromPlayer()" 
+                class="bg-brand-600 hover:bg-brand-500 text-white min-w-[200px] py-4 rounded-2xl font-bold text-base shadow-lg shadow-brand-600/20 flex items-center justify-center gap-3 transition-all transform active:scale-95 group">
+                <i class="fa-solid fa-check circle-check"></i>
+                <span>تم، شفتها وكملت</span>
             </button>
         </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-2xl shadow-2xl z-[150] flex items-center gap-3 transition-all duration-300 translate-y-20 opacity-0 min-w-max border border-slate-700">
+        <i class="fa-solid fa-circle-check text-green-400"></i>
+        <span id="toastMsg" class="font-bold text-sm"></span>
     </div>
 
     <script>
         const PASSWORD = "123";
         let allData = [];
         let completedLectures = JSON.parse(localStorage.getItem('hameed_completed_v3')) || [];
-        let currentPlayingId = null; 
+        let currentPlayingId = null;
 
+        // التحقق من الدخول
         function checkLogin() {
             const input = document.getElementById('passwordInput');
             if (input.value === PASSWORD) {
                 localStorage.setItem('hameed_loggedIn', 'true');
-                document.getElementById('loginScreen').classList.add('opacity-0', 'pointer-events-none');
+                // انيميشن خروج
+                document.getElementById('loginScreen').classList.add('opacity-0', 'scale-110');
                 setTimeout(() => {
                     document.getElementById('loginScreen').classList.add('hidden');
                     document.getElementById('appScreen').classList.remove('hidden');
-                    loadData(); 
-                }, 700);
+                    loadData();
+                }, 500);
             } else {
-                document.getElementById('errorMsg').classList.remove('hidden', 'opacity-0');
+                const error = document.getElementById('errorMsg');
+                error.classList.remove('hidden');
+                setTimeout(() => error.classList.add('hidden'), 3000);
             }
         }
 
-        function logout() { localStorage.removeItem('hameed_loggedIn'); location.reload(); }
+        function logout() {
+            if(confirm('صدك تريد تطلع؟')) {
+                localStorage.removeItem('hameed_loggedIn');
+                location.reload();
+            }
+        }
 
+        // جلب البيانات
         async function loadData() {
             const loadingText = document.getElementById('loadingText');
             try {
                 if(loadingText) loadingText.classList.remove('hidden');
 
                 const response = await fetch('data.json');
-                if (!response.ok) throw new Error('فشل تحميل الملف');
+                if (!response.ok) throw new Error('الملف مو موجود');
 
                 const rawData = await response.json();
                 
-                allData = rawData.teachers.map((teacher, tIndex) => {
-                    return {
-                        ...teacher,
-                        classes: teacher.classes.map((cls, cIndex) => {
-                            return {
-                                ...cls,
-                                lectures: cls.lectures.map((lec, lIndex) => {
-                                    const autoId = lec.id || `${teacher.id || tIndex}_${cIndex}_${lIndex}`;
-                                    return { ...lec, id: autoId };
-                                })
-                            };
-                        })
-                    };
-                });
+                // توليد IDs تلقائياً اذا ماكو
+                allData = rawData.teachers.map((teacher, tIndex) => ({
+                    ...teacher,
+                    classes: teacher.classes.map((cls, cIndex) => ({
+                        ...cls,
+                        lectures: cls.lectures.map((lec, lIndex) => ({
+                            ...lec,
+                            id: lec.id || `${teacher.id || tIndex}_${cIndex}_${lIndex}`
+                        }))
+                    }))
+                }));
 
                 if(loadingText) loadingText.classList.add('hidden');
                 
-                renderApp();
+                renderApp(allData);
                 updateStats();
                 checkLastWatched();
                 
-                const now = new Date();
-                const hour = now.getHours();
-                document.getElementById('greetingMsg').innerText = hour < 12 ? "صباح الخير يا بطل ☀️" : "مساء الخير يا مبدع 🌙";
-                document.getElementById('dateDisplay').innerText = now.toLocaleDateString('ar-IQ', { weekday: 'long', day: 'numeric', month: 'long' });
+                // تحية حسب الوقت
+                const hour = new Date().getHours();
+                let greet = "صباح الخير والنشاط ☀️";
+                if(hour >= 12 && hour < 17) greet = "مساء العافية 🌤️";
+                else if(hour >= 17) greet = "مساء الخير يا بطل 🌙";
+                
+                document.getElementById('greetingMsg').innerText = greet;
+                const dateOptions = { weekday: 'long', day: 'numeric', month: 'long' };
+                document.getElementById('dateDisplay').innerText = new Date().toLocaleDateString('ar-IQ', dateOptions);
 
             } catch (error) {
-                console.error("Error:", error);
+                console.error(error);
                 if(loadingText) {
-                    loadingText.innerHTML = `<p class="text-rose-500 font-bold">لم يتم العثور على ملف البيانات (data.json)</p>`;
-                    loadingText.classList.remove('animate-pulse', 'hidden');
+                    loadingText.innerHTML = `
+                        <div class="text-rose-500 font-bold bg-rose-50 p-4 rounded-xl border border-rose-100">
+                            <i class="fa-solid fa-triangle-exclamation mb-2 text-2xl"></i><br>
+                            ما لكيت ملف البيانات (data.json)<br>
+                            <span class="text-xs text-slate-500 font-normal">تأكد الملف موجود بنفس الفولدر يا طيب</span>
+                        </div>`;
                 }
             }
         }
 
-        function renderApp() {
+        // عرض المحتوى
+        function renderApp(data) {
             const container = document.getElementById('dynamicListContainer');
             if(!container) return;
-
             container.innerHTML = '';
 
-            if (allData.length === 0) {
-                container.innerHTML = '<p class="text-center text-slate-400 mt-10">لا توجد بيانات لعرضها</p>';
+            if (data.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10 opacity-60">
+                        <i class="fa-solid fa-folder-open text-4xl text-slate-300 mb-3"></i>
+                        <p class="font-bold text-slate-400">ماكو شي بهذا الاسم!</p>
+                    </div>`;
                 return;
             }
             
-            allData.forEach((teacher, tIndex) => {
-                const teacherSection = document.createElement('div');
-                teacherSection.className = 'bg-white rounded-[2rem] p-1 shadow-sm border border-slate-100 mb-6 animate-enter';
-                teacherSection.style.animationDelay = `${tIndex * 100}ms`;
+            data.forEach((teacher, tIndex) => {
+                const section = document.createElement('div');
+                section.className = 'glass-panel rounded-[2rem] p-2 mb-8 animate-enter border-t-4 border-t-brand-500/20';
+                section.style.animationDelay = `${tIndex * 100}ms`;
 
                 let classesHtml = '';
                 teacher.classes.forEach((cls, cIndex) => {
@@ -213,56 +318,82 @@
                     cls.lectures.forEach(lec => {
                         const isDone = completedLectures.includes(lec.id);
                         lecturesHtml += `
-                            <div class="flex items-center justify-between p-3 mb-2 rounded-xl hover:bg-slate-50 transition-colors group">
+                            <div class="flex items-center justify-between p-3 mb-3 rounded-2xl bg-white/50 border border-white hover:bg-white hover:shadow-md transition-all group duration-300">
                                 <div class="flex items-center gap-4 flex-1 cursor-pointer select-none" onclick="toggleComplete('${lec.id}')">
-                                    <div class="checkbox-wrapper relative shrink-0 w-6 h-6">
+                                    <div class="relative shrink-0 w-6 h-6">
                                         <input type="checkbox" class="sr-only" ${isDone ? 'checked' : ''}>
-                                        <div class="w-6 h-6 border-2 border-slate-200 rounded-lg flex items-center justify-center transition-all duration-300 bg-white group-hover:border-indigo-400">
-                                            <svg class="w-3.5 h-3.5 text-white stroke-[3] transition-all duration-300 stroke-dasharray-10 stroke-dashoffset-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                        <div class="custom-checkbox w-6 h-6 border-[2.5px] border-slate-300 rounded-lg flex items-center justify-center bg-white group-hover:border-brand-400">
+                                            <svg class="w-3.5 h-3.5 text-white stroke-[3.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
                                         </div>
                                     </div>
                                     <div class="flex flex-col">
-                                        <span class="text-sm font-bold text-slate-700 transition-all ${isDone ? 'line-through text-slate-400' : ''}">${lec.title}</span>
-                                        ${lec.description ? `<span class="text-[10px] text-slate-400 mt-0.5 truncate max-w-[200px]">${lec.description}</span>` : ''}
+                                        <span class="text-sm font-bold text-slate-700 transition-all ${isDone ? 'line-through text-slate-400 decoration-2 decoration-slate-300' : ''}">${lec.title}</span>
+                                        ${lec.description ? `<span class="text-[10px] text-slate-400 mt-0.5 truncate max-w-[180px]">${lec.description}</span>` : ''}
                                     </div>
                                 </div>
                                 <button onclick="openPlayer('${lec.title.replace(/'/g, "\\'")}', '${lec.url}', '${lec.id}')" 
-                                    class="${lec.url === '#' ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/20'} w-10 h-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center transition-all duration-300 active:scale-95">
-                                    <svg class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    class="${lec.url === '#' ? 'opacity-40 cursor-not-allowed bg-slate-100' : 'bg-brand-50 text-brand-600 hover:bg-brand-600 hover:text-white hover:scale-110 shadow-sm'} w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 active:scale-90 ml-1">
+                                    <i class="fa-solid fa-play text-xs ml-0.5"></i>
                                 </button>
                             </div>`;
                     });
 
                     classesHtml += `
-                        <details class="group/accordion mb-2 last:mb-0" ${cIndex === 0 ? 'open' : ''}>
-                            <summary class="flex items-center justify-between p-4 bg-slate-50/50 rounded-2xl cursor-pointer list-none select-none active:bg-slate-100 transition-colors">
-                                <span class="font-bold text-slate-700 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-indigo-500"></span>${cls.name}</span>
-                                <svg class="arrow-icon w-5 h-5 text-slate-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <details class="group/acc mb-3 last:mb-0" ${cIndex === 0 ? 'open' : ''}>
+                            <summary class="flex items-center justify-between p-4 bg-slate-50/80 rounded-2xl cursor-pointer list-none select-none active:bg-slate-100 transition-colors border border-transparent hover:border-slate-200">
+                                <span class="font-black text-slate-700 flex items-center gap-3">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-brand-500 shadow-[0_0_10px_rgba(139,92,246,0.5)]"></span>
+                                    ${cls.name}
+                                </span>
+                                <i class="fa-solid fa-chevron-down text-slate-400 text-sm transition-transform duration-300 group-open/acc:rotate-180"></i>
                             </summary>
-                            <div class="pt-2 px-2 pb-2">${lecturesHtml}</div>
+                            <div class="pt-3 px-2 pb-1">${lecturesHtml}</div>
                         </details>`;
                 });
 
-                teacherSection.innerHTML = `
-                    <div class="flex items-center gap-4 p-4 border-b border-slate-100">
-                        <img src="${teacher.image}" class="w-16 h-16 rounded-2xl object-cover shadow-md ring-2 ring-white bg-slate-200">
+                section.innerHTML = `
+                    <div class="flex items-center gap-5 p-5 border-b border-slate-100/50">
+                        <div class="relative">
+                            <img src="${teacher.image}" class="w-16 h-16 rounded-2xl object-cover shadow-lg ring-4 ring-white bg-slate-200">
+                            <div class="absolute -bottom-1 -right-1 bg-green-500 w-4 h-4 rounded-full border-2 border-white"></div>
+                        </div>
                         <div>
-                            <h2 class="font-black text-lg text-slate-800">${teacher.name}</h2>
-                            <span class="text-xs font-bold text-indigo-500 bg-indigo-50 px-2 py-1 rounded-md mt-1 inline-block">${teacher.subject}</span>
+                            <h2 class="font-black text-xl text-slate-800">${teacher.name}</h2>
+                            <span class="text-[11px] font-bold text-brand-600 bg-brand-100/50 px-2.5 py-1 rounded-lg mt-1 inline-block border border-brand-100">${teacher.subject}</span>
                         </div>
                     </div>
                     <div class="p-2">${classesHtml}</div>`;
-                container.appendChild(teacherSection);
+                container.appendChild(section);
             });
         }
 
+        // البحث المباشر
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            if(!term) { renderApp(allData); return; }
+
+            // فلترة ذكية
+            const filtered = allData.map(teacher => {
+                const filteredClasses = teacher.classes.map(cls => {
+                    const filteredLecs = cls.lectures.filter(l => l.title.toLowerCase().includes(term));
+                    return { ...cls, lectures: filteredLecs };
+                }).filter(cls => cls.lectures.length > 0);
+                return { ...teacher, classes: filteredClasses };
+            }).filter(t => t.classes.length > 0);
+
+            renderApp(filtered);
+        });
+
+        // تشغيل الفيديو
         function openPlayer(title, url, id) {
-            if (url === '#' || !url) { alert('الرابط غير متوفر حالياً'); return; }
+            if (url === '#' || !url) { showToast('الرابط لسة مموجود!', 'error'); return; }
             currentPlayingId = id;
             const modal = document.getElementById('videoModal');
             document.getElementById('modalTitle').innerText = title;
+            
             const container = document.getElementById('videoContainer');
             container.innerHTML = '';
+            
             const iframe = document.createElement('iframe');
             iframe.src = url;
             iframe.allow = "autoplay; fullscreen; picture-in-picture";
@@ -271,14 +402,17 @@
 
             const btn = document.getElementById('markCompleteBtn');
             if (completedLectures.includes(id)) {
-                btn.innerHTML = '<span>✅ مكتملة</span>';
-                btn.className = "bg-green-600 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-lg flex items-center gap-2 cursor-default opacity-80";
+                btn.innerHTML = '<i class="fa-solid fa-check-double"></i><span>مكملها انت أصلاً</span>';
+                btn.className = "bg-green-600 text-white min-w-[200px] py-4 rounded-2xl font-bold text-base shadow-lg flex items-center justify-center gap-3 opacity-90 cursor-default";
             } else {
-                btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>إتمام المحاضرة</span>`;
-                btn.className = "bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-lg shadow-indigo-600/30 flex items-center gap-2 transition transform active:scale-95";
+                btn.innerHTML = '<i class="fa-solid fa-check"></i><span>تم، شفتها وكملت</span>';
+                btn.className = "bg-brand-600 hover:bg-brand-500 text-white min-w-[200px] py-4 rounded-2xl font-bold text-base shadow-lg shadow-brand-600/30 flex items-center justify-center gap-3 transition-all transform active:scale-95";
             }
+            
             modal.classList.remove('hidden');
-            requestAnimationFrame(() => modal.classList.remove('opacity-0'));
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            
+            // حفظ اخر مشاهدة
             localStorage.setItem('hameed_lastWatched', JSON.stringify({ title, url, id }));
             checkLastWatched();
         }
@@ -290,52 +424,70 @@
                 modal.classList.add('hidden');
                 document.getElementById('videoContainer').innerHTML = '';
                 currentPlayingId = null;
-            }, 500);
+            }, 300);
         }
 
+        // زر اكمال المحاضرة من داخل المشغل
         function completeFromPlayer() {
             if (currentPlayingId && !completedLectures.includes(currentPlayingId)) {
                 toggleComplete(currentPlayingId);
                 const btn = document.getElementById('markCompleteBtn');
-                btn.innerHTML = '<span>🎉 عاشت ايدك</span>';
-                btn.classList.replace('bg-indigo-600', 'bg-green-600');
+                btn.innerHTML = '<i class="fa-solid fa-champagne-glasses"></i><span>عاشت ايدك يا بطل!</span>';
+                btn.classList.replace('bg-brand-600', 'bg-green-500');
+                triggerConfetti();
+                setTimeout(() => closeVideoModal(), 1500);
+            } else {
+                closeVideoModal();
             }
         }
 
         function toggleComplete(id) {
             if (completedLectures.includes(id)) {
                 completedLectures = completedLectures.filter(i => i !== id);
+                showToast('لغيت الاكتمال', 'info');
             } else {
                 completedLectures.push(id);
                 triggerConfetti();
+                showToast('عاشت ايدك، استمر!', 'success');
             }
             localStorage.setItem('hameed_completed_v3', JSON.stringify(completedLectures));
-            renderApp();
+            
+            // اعادة الرندر فقط اذا ماكو بحث، حتى ما يخرب البحث
+            const searchVal = document.getElementById('searchInput').value;
+            if(!searchVal) renderApp(allData);
+            else document.getElementById('searchInput').dispatchEvent(new Event('input')); // اعادة تطبيق البحث لتحديث الايقونات
+
             updateStats();
         }
 
+        // تحديث الاحصائيات
         function updateStats() {
             let total = 0;
             allData.forEach(t => t.classes.forEach(c => total += c.lectures.length));
             const count = completedLectures.length;
             const percent = total === 0 ? 0 : Math.round((count / total) * 100);
-            const circle = document.getElementById('progressCircle');
-            if(circle) circle.style.setProperty('--progress', `${percent * 3.6}deg`);
+            
+            // تحديث الدائرة
+            const circle = document.getElementById('progressCirclePath');
+            const circumference = 2 * Math.PI * 28;
+            const offset = circumference - (percent / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+
             document.getElementById('percentageText').innerText = `${percent}%`;
             document.getElementById('statsRatio').innerText = `${count}/${total}`;
+            
             const badge = document.getElementById('statusBadge');
-            if (percent === 100) { badge.innerText = "🏆 أسطورة!"; badge.className = "text-[10px] bg-green-400 px-2 py-0.5 rounded-lg text-white font-bold"; }
-            else if (percent > 50) { badge.innerText = "🔥 واصل التقدم"; badge.className = "text-[10px] bg-orange-400 px-2 py-0.5 rounded-lg text-white font-bold"; }
-            else { badge.innerText = "🚀 بداية قوية"; badge.className = "text-[10px] bg-white/20 px-2 py-0.5 rounded-lg text-white font-bold"; }
+            if (percent === 100) { badge.innerHTML = "🏆 أسطورة الدراسة!"; badge.parentElement.className = "mt-3 inline-flex items-center gap-1.5 bg-green-500 px-3 py-1 rounded-full text-[10px] text-white font-bold shadow-lg shadow-green-500/30"; }
+            else if (percent > 50) { badge.innerHTML = "🔥 واصل، نص الطريق!"; badge.parentElement.className = "mt-3 inline-flex items-center gap-1.5 bg-orange-500 px-3 py-1 rounded-full text-[10px] text-white font-bold shadow-lg shadow-orange-500/30"; }
         }
 
+        // استرجاع اخر محاضرة
         function checkLastWatched() {
             const last = JSON.parse(localStorage.getItem('hameed_lastWatched'));
             const container = document.getElementById('resumeContainer');
             if (last && container) {
                 container.classList.remove('hidden');
-                const titleElem = document.getElementById('resumeTitle');
-                if(titleElem) titleElem.innerText = last.title;
+                document.getElementById('resumeTitle').innerText = last.title;
             }
         }
 
@@ -344,32 +496,78 @@
             if (last) openPlayer(last.title, last.url, last.id);
         }
 
+        // نظام التنبيهات
+        function showToast(msg, type) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toastMsg');
+            msgEl.innerText = msg;
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            // الوان حسب النوع
+            if(type === 'success') toast.innerHTML = `<i class="fa-solid fa-circle-check text-green-400 text-xl"></i><span class="font-bold">${msg}</span>`;
+            else if(type === 'info') toast.innerHTML = `<i class="fa-solid fa-circle-info text-blue-400 text-xl"></i><span class="font-bold">${msg}</span>`;
+            else toast.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-400 text-xl"></i><span class="font-bold">${msg}</span>`;
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // تأثيرات الاحتفال (Confetti)
         function triggerConfetti() {
             const canvas = document.getElementById('confetti-canvas');
             if(!canvas) return;
             const ctx = canvas.getContext('2d');
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            
             const particles = [];
-            for(let i=0; i<60; i++) particles.push({ x: canvas.width/2, y: canvas.height/2, vx: (Math.random()-0.5)*20, vy: (Math.random()-0.5)*20, color: `hsl(${Math.random()*360}, 100%, 50%)`, life: 100 });
+            const colors = ['#8b5cf6', '#06b6d4', '#f43f5e', '#10b981', '#f59e0b'];
+            
+            for(let i=0; i<100; i++) {
+                particles.push({
+                    x: canvas.width/2, 
+                    y: canvas.height/2, 
+                    vx: (Math.random()-0.5)*25, 
+                    vy: (Math.random()-0.5)*25, 
+                    color: colors[Math.floor(Math.random()*colors.length)], 
+                    life: 100 + Math.random()*50,
+                    size: Math.random() * 8 + 4
+                });
+            }
+
             function animate() {
                 ctx.clearRect(0,0,canvas.width,canvas.height);
                 let active = false;
                 particles.forEach(p => {
                     if(p.life > 0) {
-                        active = true; p.x += p.vx; p.y += p.vy; p.life--; p.vy += 0.5;
-                        ctx.fillStyle = p.color; ctx.fillRect(p.x, p.y, 6, 6);
+                        active = true; 
+                        p.x += p.vx; p.y += p.vy; 
+                        p.vy += 0.4; // جاذبية
+                        p.vx *= 0.96; p.vy *= 0.96; // احتكاك
+                        p.life--; 
+                        
+                        ctx.globalAlpha = p.life / 100;
+                        ctx.fillStyle = p.color;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+                        ctx.fill();
                     }
                 });
-                if(active) requestAnimationFrame(animate); else ctx.clearRect(0,0,canvas.width,canvas.height);
+                if(active) requestAnimationFrame(animate); 
+                else ctx.clearRect(0,0,canvas.width,canvas.height);
             }
             animate();
         }
 
+        // تشغيل تلقائي اذا مسجل دخول
         if (localStorage.getItem('hameed_loggedIn') === 'true') {
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('appScreen').classList.remove('hidden');
             loadData();
         }
+
+        // زر انتر بالباسورد
         document.getElementById('passwordInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') checkLogin(); });
     </script>
 </body>

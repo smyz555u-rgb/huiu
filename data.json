@@ -7,6 +7,52 @@
       "image": "https://zockto.b-cdn.net/IMG_%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A1%D9%A2%D9%A2_%D9%A2%D9%A3%D9%A1%D9%A1%D9%A4%D9%A0_231.jpg",
       "classes": [
         {
+          "name": " 2026 الفصل الاول",
+          "lectures": [
+            {
+              "title": "المحاضرة 28",
+              "url": "https://iframe.mediadelivery.net/embed/556231/c50f4d83-6551-4434-8792-5b3a5bff0c75",
+              "description": "المحاضرة 28 من الفصل الأول."
+            },
+            {
+              "title": "المحاضرة 29",
+              "url": "https://iframe.mediadelivery.net/embed/556231/c8e274f0-40ad-406e-b32e-197a2bf9f033",
+              "description": "المحاضرة 29 من الفصل الأول."
+            },
+            {
+              "title": "المحاضرة 30",
+              "url": "https://iframe.mediadelivery.net/embed/556231/18de7001-ea3d-464f-8a03-ddf33b824da2",
+              "description": "المحاضرة 30 من الفصل الأول."
+           },
+            {
+              "title": " المحاضرة 30 الجزء الثاني",
+              "url": "https://iframe.mediadelivery.net/embed/556231/43a97810-065c-4224-85b1-2bbb2e0d5796",
+              "description": "المحاضرة 30 من الفصل الأول."
+            
+            },
+            {
+              "title": "المحاضرة 31 - الجزء الأول",
+              "url": "https://iframe.mediadelivery.net/embed/556231/403c0fb1-f89c-4b6d-b8bf-6d60fa6751be",
+              "description": "المحاضرة 31، الجزء الأول من الفصل الأول."
+            },
+            {
+              "title": "المحاضرة 31 - الجزء الثاني",
+              "url": "https://iframe.mediadelivery.net/embed/556231/e53aabf9-ed6a-4b7d-8b53-2e941dcff4c5",
+              "description": "المحاضرة 31، الجزء الثاني من الفصل الأول."
+            },
+            {
+              "title": "المحاضرة 32 - الجزء الأول",
+              "url": "#",
+              "description": "المحاضرة 32، الجزء الأول من الفصل الأول."
+            },
+            {
+              "title": "المحاضرة 32 - الجزء الثاني",
+              "url": "#",
+              "description": "المحاضرة 32، الجزء الثاني من الفصل الأول."
+            }
+          ]
+        },
+        {
           "name": " 2026 الفصل الثالث: تطبيقات التفاضل",
           "lectures": [
             {

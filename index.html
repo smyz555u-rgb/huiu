@@ -40,6 +40,15 @@
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 20px; }
+        
+        /* Countdown specific styles */
+        .countdown-segment { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            background: rgba(255, 255, 255, 0.1); 
+            border-radius: 8px; 
+            padding: 4px 0;
+            width: 25%; /* To ensure 4 segments fit well */
+        }
     </style>
 </head>
 <body class="text-slate-800 h-[100dvh] flex flex-col bg-slate-100">
@@ -75,6 +84,18 @@
                 </div>
             </div>
             
+            <div id="dateCountdownCard" class="bg-gradient-to-tr from-brand-600 to-brand-500 p-4 rounded-xl text-white shadow-lg shadow-brand-500/30 mb-4 animate-enter">
+                <div class="flex justify-between items-center border-b border-white/20 pb-2 mb-3">
+                    <h3 class="font-bold text-base"><i class="fa-solid fa-sun-cloud ml-2"></i> ${'يومك الحالي'}</h3>
+                    <span id="currentDayOfWeek" class="font-black text-lg bg-white/20 px-3 py-0.5 rounded-full text-white">--</span>
+                </div>
+
+                <div class="text-center">
+                    <p class="text-sm font-medium mb-2">باقي على نصف السنة</p>
+                    <div id="countdownTimer" class="flex justify-around gap-2 font-mono text-center">
+                        </div>
+                </div>
+            </div>
             <div class="relative">
                 <i class="fa-solid fa-search absolute right-4 top-3.5 text-slate-400"></i>
                 <input type="text" id="searchInput" placeholder="ابحث عن محاضرة..." class="w-full bg-slate-100 rounded-xl py-3 pr-10 pl-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 ring-brand-200 transition-all">
@@ -130,7 +151,7 @@
     <script>
         const PASSWORD = "123";
         // الجزء الثابت لرابط الصور المصغرة
-        const THUMBNAIL_BASE = "https://vz-3be90c46-1ad.b-cdn.net"; 
+        const THUMBNAIL_BASE = "https://vz-3be90c46-1ad.b-cdn.net"; // تأكد من صحة هذا النطاق
         
         let allData = [];
         let completedLectures = JSON.parse(localStorage.getItem('hameed_completed_v3')) || [];
@@ -173,24 +194,97 @@
                 updateStats();
                 updateSmartSchedule();
                 checkLastWatched();
-                document.getElementById('dateDisplay').innerText = new Date().toLocaleDateString('ar-IQ', {weekday:'long', day:'numeric', month:'long'});
+                
+                // إضافة عرض التاريخ والوقت والعداد
+                updateDateTime();
+                setupCountdown();
+                
             } catch(e) {
                 document.getElementById('loadingText').innerHTML = "فشل تحميل الملف (data.json)";
             }
         }
 
-        // --- دالة استخراج رابط الصورة المصغرة ---
+        // --- وظيفة عرض اليوم والوقت ---
+        function updateDateTime() {
+            const today = new Date();
+            // عرض التاريخ بالتفصيل
+            document.getElementById('dateDisplay').innerText = today.toLocaleDateString('ar-IQ', {weekday:'long', day:'numeric', month:'long'});
+            // عرض اليوم من الأسبوع فقط
+            document.getElementById('currentDayOfWeek').innerText = today.toLocaleDateString('ar-IQ', {weekday:'long'});
+        }
+
+        // --- وظيفة العداد التنازلي ---
+        function setupCountdown() {
+            const countdownElement = document.getElementById('countdownTimer');
+            const now = new Date();
+            
+            // هدف العد التنازلي: 20 يناير من العام المقبل
+            // إذا كان ديسمبر، نحسب للسنة القادمة، وإلا نفترض نفس السنة (للتاريخ الحالي 8 ديسمبر 2025)
+            const targetYear = now.getMonth() < 1 ? now.getFullYear() : now.getFullYear() + 1; // إذا كنا في يناير، نستخدم نفس السنة، وإلا ننتقل للسنة القادمة
+            const targetDate = new Date(targetYear, 0, 20); // 0 = يناير, 20 = اليوم
+            
+            // تحقق ما إذا كان قد مر الموعد
+            if (targetDate.getTime() < now.getTime()) {
+                countdownElement.innerHTML = '<span class="text-lg font-bold">🎉 خلصت! بالتوفيق!</span>';
+                return;
+            }
+
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = targetDate.getTime() - now;
+
+                // حساب الأيام والساعات والدقائق والثواني
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                if (distance < 0) {
+                    clearInterval(countdownInterval);
+                    countdownElement.innerHTML = '<span class="text-lg font-bold">🎉 خلصت! بالتوفيق!</span>';
+                    return;
+                }
+
+                // تحديث العرض
+                countdownElement.innerHTML = `
+                    <div class="countdown-segment">
+                        <span class="text-2xl font-black">${days}</span>
+                        <span class="text-xs">يوم</span>
+                    </div>
+                    <div class="countdown-segment">
+                        <span class="text-2xl font-black">${hours < 10 ? '0' + hours : hours}</span>
+                        <span class="text-xs">ساعة</span>
+                    </div>
+                    <div class="countdown-segment">
+                        <span class="text-2xl font-black">${minutes < 10 ? '0' + minutes : minutes}</span>
+                        <span class="text-xs">دقيقة</span>
+                    </div>
+                    <div class="countdown-segment">
+                        <span class="text-2xl font-black">${seconds < 10 ? '0' + seconds : seconds}</span>
+                        <span class="text-xs">ثانية</span>
+                    </div>
+                `;
+            }
+
+            const countdownInterval = setInterval(updateCountdown, 1000);
+            updateCountdown(); // عرض مبدئي فوري
+        }
+        
+        // --- دالة استخراج رابط الصورة المصغرة (لم تتغير) ---
         function getThumbnailUrl(videoUrl) {
             try {
-                // videoUrl مثال: https://iframe.mediadelivery.net/embed/519756/ed13dc36-4508...
-                if (!videoUrl || videoUrl === '#') return 'https://via.placeholder.com/150x100?text=No+Video';
+                const NO_THUMBNAIL_URL = 'https://via.placeholder.com/150x100?text=No+Video';
+
+                if (!videoUrl || videoUrl === '#' || !videoUrl.includes('mediadelivery.net')) return NO_THUMBNAIL_URL;
                 
-                // نقص الرابط وناخذ اخر جزء (الآيدي)
-                // .split('?')[0] هاي علمود نحذف اي زيادات اذا اكوو بعد الايدي
                 const videoId = videoUrl.split('/').pop().split('?')[0];
                 
-                // نركب الرابط الجديد
-                return `${THUMBNAIL_BASE}/${videoId}/thumbnail.jpg`;
+                if(videoId) {
+                    return `${THUMBNAIL_BASE}/${videoId}/thumbnail.jpg`;
+                }
+                
+                return NO_THUMBNAIL_URL;
+
             } catch (e) {
                 return 'https://via.placeholder.com/150x100?text=Error';
             }
@@ -212,7 +306,7 @@
                     cls.lectures.forEach(lec => {
                         const isDone = completedLectures.includes(lec.id);
                         const duration = savedDurations[lec.id] || '--:--';
-                        const thumbUrl = getThumbnailUrl(lec.url); // استدعاء دالة الصورة
+                        const thumbUrl = getThumbnailUrl(lec.url); 
                         
                         lecsHtml += `
                             <div id="row_${lec.id}" class="lecture-item ${isDone ? 'completed' : ''} flex gap-3 p-3 mb-3 bg-white rounded-xl border border-slate-100 hover:shadow-lg transition-all duration-300">
@@ -331,7 +425,7 @@
             if (!currentPlayingId) return;
             try {
                 if (e.data && e.data.type === 'player.ready' && e.data.duration) {
-                   saveDuration(currentPlayingId, e.data.duration);
+                    saveDuration(currentPlayingId, e.data.duration);
                 }
                 if (e.data && typeof e.data.duration === 'number' && e.data.duration > 0) {
                     saveDuration(currentPlayingId, e.data.duration);
@@ -348,7 +442,6 @@
                 savedDurations[id] = timeStr;
                 localStorage.setItem('hameed_durations', JSON.stringify(savedDurations));
                 
-                // تحديث الوقت فوق الصورة
                 const badge = document.getElementById(`dur_img_${id}`);
                 if (badge) badge.innerText = timeStr;
             }

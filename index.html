@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>منصة حميد | تنظيم فول</title>
+    <title>منصة حميد | شاشة كاملة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://assets.mediadelivery.net/playerjs/player-0.1.0.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
@@ -24,7 +24,7 @@
     </script>
 
     <style>
-        body { background: #f3f4f6; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
+        body { background: #f8fafc; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
         .animate-enter { animation: slideInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; opacity: 0; }
         @keyframes slideInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -32,7 +32,7 @@
         .lecture-item.completed .lec-title { text-decoration: line-through; color: #94a3b8; }
         .lecture-item.completed img { filter: grayscale(100%); }
 
-        /* --- تعديل نافذة الفيديو لتكون متجاوبة جداً --- */
+        /* نافذة الفيديو المتجاوبة */
         .video-wrapper-responsive {
             width: 100%;
             height: 100%;
@@ -41,56 +41,44 @@
             justify-content: center;
             padding: 0;
         }
-
         .video-container { 
             position: relative; 
             width: 100%;
-            aspect-ratio: 16 / 9; /* الحفاظ على أبعاد الفيديو بدقة */
+            aspect-ratio: 16 / 9; 
             background: #000; 
             overflow: hidden; 
             box-shadow: 0 20px 50px -10px rgba(0,0,0,0.8);
         }
-
         .video-container iframe { 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            border: none;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
         }
-
-        /* تنسيق خاص للشاشات الكبيرة (لابتوب/تابلت) */
         @media (min-width: 768px) {
             .video-container {
                 border-radius: 16px;
-                max-width: 90%;
-                max-height: 80vh; /* حتى لا يخرج الفيديو عن طول الشاشة */
+                max-width: 85%;
+                max-height: 85vh;
             }
         }
-
-        /* تنسيق خاص للموبايل (شاشة كاملة بالعرض) */
         @media (max-width: 767px) {
-            .video-container {
-                border-radius: 0;
-                width: 100%;
-            }
+            .video-container { border-radius: 0; width: 100%; }
         }
         
-        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 20px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
         .countdown-segment { 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            background: rgba(255, 255, 255, 0.1); 
-            border-radius: 8px; 
-            padding: 4px 0;
-            width: 25%; 
+            background: rgba(255, 255, 255, 0.15); 
+            border-radius: 12px; 
+            padding: 8px 0;
+            width: 25%;
+            backdrop-filter: blur(5px);
         }
     </style>
 </head>
-<body class="text-slate-800 h-[100dvh] flex flex-col bg-slate-100">
+<body class="text-slate-800 h-[100dvh] flex flex-col bg-slate-50">
 
     <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-[100]"></canvas>
 
@@ -106,101 +94,110 @@
         </div>
     </div>
 
-    <div id="appScreen" class="hidden flex flex-col h-full w-full max-w-xl mx-auto bg-white sm:shadow-2xl sm:border-x border-slate-200">
+    <div id="appScreen" class="hidden flex flex-col h-full w-full bg-white text-slate-800">
         
-        <header class="px-5 pt-6 pb-4 bg-white/90 backdrop-blur-md sticky top-0 z-20 border-b border-slate-100">
-            <div class="flex justify-between items-center mb-4">
-                <div>
-                    <h1 class="text-xl font-black text-slate-800" id="greetingMsg">هلا والله!</h1>
-                    <p class="text-xs text-slate-500 font-bold" id="dateDisplay">--</p>
-                </div>
-                <div class="flex gap-2">
-                    <div class="text-center px-3 py-1 bg-brand-50 rounded-lg border border-brand-100">
-                        <span class="block text-[10px] text-slate-400 font-bold">نسبة الانجاز</span>
-                        <span class="text-lg font-black text-brand-600" id="percentageText">0%</span>
-                    </div>
-                    <button onclick="logout()" class="w-10 h-10 rounded-lg bg-rose-50 text-rose-500 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-colors"><i class="fa-solid fa-right-from-bracket"></i></button>
-                </div>
-            </div>
-            
-            <div id="dateCountdownCard" class="bg-gradient-to-tr from-brand-600 to-brand-500 p-4 rounded-xl text-white shadow-lg shadow-brand-500/30 mb-4 animate-enter">
-                <div class="flex justify-between items-center border-b border-white/20 pb-2 mb-3">
-                    <h3 class="font-bold text-base"><i class="fa-solid fa-sun-cloud ml-2"></i> يومك الحالي</h3>
-                    <span id="currentDayOfWeek" class="font-black text-lg bg-white/20 px-3 py-0.5 rounded-full text-white">--</span>
-                </div>
-
-                <div class="text-center">
-                    <p class="text-sm font-medium mb-2">باقي على نصف السنة</p>
-                    <div id="countdownTimer" class="flex justify-around gap-2 font-mono text-center">
+        <header class="px-6 pt-4 pb-4 bg-white/95 backdrop-blur-md sticky top-0 z-20 border-b border-slate-200 shadow-sm">
+            <div class="max-w-[1920px] mx-auto w-full">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-lg shadow-brand-500/20">
+                            <i class="fa-solid fa-graduation-cap text-xl"></i>
                         </div>
+                        <div>
+                            <h1 class="text-xl font-black text-slate-800" id="greetingMsg">هلا والله!</h1>
+                            <p class="text-xs text-slate-500 font-bold" id="dateDisplay">--</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-3 items-center">
+                        <div class="hidden md:block text-center px-4 py-2 bg-slate-50 rounded-xl border border-slate-100">
+                            <span class="block text-[10px] text-slate-400 font-bold">نسبة الانجاز</span>
+                            <span class="text-xl font-black text-brand-600" id="percentageText">0%</span>
+                        </div>
+                        <button onclick="logout()" class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><i class="fa-solid fa-right-from-bracket"></i></button>
+                    </div>
                 </div>
-            </div>
-            
-            <div id="apiFetcherArea" class="hidden mb-4">
-                 <button onclick="fetchAllDurationsFromAPI()" class="w-full py-2 bg-slate-800 text-white rounded-lg text-xs font-bold hover:bg-slate-700 transition"><i class="fa-solid fa-cloud-arrow-down ml-2"></i> تحديث أوقات المحاضرات (API)</button>
-            </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
+                    <div id="dateCountdownCard" class="bg-gradient-to-r from-brand-600 to-brand-500 p-4 rounded-xl text-white shadow-lg shadow-brand-500/20 flex flex-col justify-between">
+                        <div class="flex justify-between items-center border-b border-white/20 pb-2 mb-2">
+                            <h3 class="font-bold text-sm"><i class="fa-solid fa-hourglass-half ml-2"></i> باقي على نصف السنة</h3>
+                            <span id="currentDayOfWeek" class="font-bold text-xs bg-white/20 px-2 py-0.5 rounded-full text-white">--</span>
+                        </div>
+                        <div id="countdownTimer" class="flex justify-between gap-2 font-mono text-center w-full"></div>
+                    </div>
 
-            <div class="relative">
-                <i class="fa-solid fa-search absolute right-4 top-3.5 text-slate-400"></i>
-                <input type="text" id="searchInput" placeholder="ابحث عن محاضرة..." class="w-full bg-slate-100 rounded-xl py-3 pr-10 pl-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 ring-brand-200 transition-all">
+                    <div class="lg:col-span-2 flex flex-col gap-3 justify-center">
+                        <div id="apiFetcherArea" class="hidden">
+                             <button onclick="fetchAllDurationsFromAPI()" class="w-full py-3 bg-slate-800 text-white rounded-xl text-sm font-bold hover:bg-slate-700 transition flex items-center justify-center gap-2 shadow-md"><i class="fa-solid fa-cloud-arrow-down"></i> تحديث أوقات المحاضرات (API)</button>
+                        </div>
+                        <div class="relative h-full">
+                            <i class="fa-solid fa-search absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="text" id="searchInput" placeholder="ابحث عن محاضرة، موضوع، او مدرس..." class="w-full h-full bg-slate-100/80 rounded-xl px-4 py-3 pr-10 pl-4 text-base font-bold text-slate-700 outline-none focus:bg-white focus:ring-2 ring-brand-200 transition-all border border-transparent focus:border-brand-300">
+                        </div>
+                    </div>
+                </div>
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto px-5 py-4 pb-32 scroll-smooth">
-            
-            <div id="smartScheduleCard" class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-5 text-white mb-6 shadow-xl shadow-slate-900/20 hidden animate-enter">
-                <div class="flex items-center gap-2 mb-3 border-b border-white/10 pb-3">
-                    <i class="fa-regular fa-calendar-check text-brand-400"></i>
-                    <h3 class="font-bold text-sm">جدولك لليوم (نظام ذكي)</h3>
-                </div>
-                <div id="scheduleContent" class="space-y-3"></div>
-            </div>
-
-            <div id="resumeContainer" class="hidden mb-6 animate-enter">
-                <button onclick="resumeLastWatched()" class="w-full bg-brand-50 border border-brand-100 p-4 rounded-2xl flex items-center gap-4 text-right hover:bg-brand-100 transition-colors">
-                    <div class="w-10 h-10 rounded-full bg-brand-200 flex items-center justify-center text-brand-700"><i class="fa-solid fa-play"></i></div>
-                    <div class="flex-1">
-                        <span class="text-[10px] text-brand-600 font-bold uppercase">وين ما وكفت</span>
-                        <h4 class="font-bold text-slate-800 text-sm truncate" id="resumeTitle">...</h4>
+        <main class="flex-1 overflow-y-auto px-6 py-6 pb-32 scroll-smooth bg-slate-50">
+            <div class="max-w-[1920px] mx-auto w-full">
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div id="smartScheduleCard" class="md:col-span-2 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hidden animate-enter">
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="w-8 h-8 rounded-lg bg-brand-50 flex items-center justify-center text-brand-600"><i class="fa-regular fa-calendar-check"></i></div>
+                            <h3 class="font-black text-slate-800">جدولك لليوم</h3>
+                        </div>
+                        <div id="scheduleContent" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
                     </div>
-                </button>
-            </div>
 
-            <div id="loadingText" class="text-center py-10 text-slate-400">
-                <i class="fa-solid fa-circle-notch fa-spin text-2xl mb-2"></i>
-                <p class="text-sm">دا نحمل البيانات...</p>
-            </div>
+                    <div id="resumeContainer" class="hidden animate-enter">
+                        <button onclick="resumeLastWatched()" class="w-full h-full bg-white border border-brand-100 p-5 rounded-2xl flex flex-col justify-center items-start gap-3 hover:shadow-lg hover:border-brand-200 transition-all group">
+                            <div class="flex items-center gap-3 w-full">
+                                <div class="w-12 h-12 rounded-full bg-brand-50 group-hover:bg-brand-500 group-hover:text-white transition-colors flex items-center justify-center text-brand-600 text-xl"><i class="fa-solid fa-play ml-1"></i></div>
+                                <div>
+                                    <span class="text-[10px] text-slate-400 font-bold uppercase block mb-0.5">اخر شي شفته</span>
+                                    <h4 class="font-black text-slate-800 text-base line-clamp-1 text-right" id="resumeTitle">...</h4>
+                                </div>
+                            </div>
+                            <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-2">
+                                <div class="bg-brand-500 h-full w-2/3"></div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
 
-            <div id="dynamicListContainer" class="space-y-6"></div>
+                <div id="loadingText" class="text-center py-20 text-slate-400">
+                    <i class="fa-solid fa-circle-notch fa-spin text-3xl mb-4 text-brand-300"></i>
+                    <p class="text-base font-bold">دا نحمل البيانات...</p>
+                </div>
+
+                <div id="dynamicListContainer" class="space-y-8"></div>
+            </div>
         </main>
     </div>
 
     <div id="videoModal" class="fixed inset-0 z-[100] bg-black hidden flex flex-col opacity-0 transition-opacity duration-300">
         <div class="p-4 flex justify-between items-center bg-white/10 backdrop-blur-md z-10">
-            <h2 class="text-white font-bold text-sm truncate flex-1 pl-4" id="modalTitle">عنوان</h2>
-            <button onclick="closeVideoModal()" class="text-white w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-rose-500 transition-colors"><i class="fa-solid fa-xmark"></i></button>
+            <h2 class="text-white font-bold text-lg truncate flex-1 pl-4" id="modalTitle">عنوان</h2>
+            <button onclick="closeVideoModal()" class="text-white w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-rose-600 transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
         </div>
-
         <div class="flex-1 video-wrapper-responsive relative bg-black">
             <div class="video-container shadow-2xl">
                 <div id="videoContainer" class="w-full h-full"></div>
             </div>
         </div>
-
         <div class="p-6 bg-black flex justify-center z-10 pb-10 sm:pb-6">
-            <button id="markCompleteBtn" onclick="completeFromPlayer()" class="bg-brand-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-brand-600/30 active:scale-95 transition-transform flex items-center gap-2">
+            <button id="markCompleteBtn" onclick="completeFromPlayer()" class="bg-brand-600 text-white px-10 py-4 rounded-xl font-bold text-lg shadow-lg shadow-brand-600/30 active:scale-95 transition-transform flex items-center gap-3 hover:bg-brand-500">
                 <i class="fa-solid fa-check"></i> <span>تم، كملتها</span>
             </button>
         </div>
     </div>
 
     <script>
-        // ==========================================
-        // ⚙️ إعدادات باني (اختياري لجلب الوقت تلقائياً)
-        // ==========================================
         const BUNNY_API_KEY = "071eadcd-7e8e-4840-90403f7fa8d2-1628-4800"; 
         const BUNNY_LIBRARY_ID = "572295"; 
-
         const PASSWORD = "123";
         const THUMBNAIL_BASE = "https://vz-dccdba03-a7d.b-cdn.net"; 
         
@@ -208,9 +205,8 @@
         let completedLectures = JSON.parse(localStorage.getItem('hameed_completed_v3')) || [];
         let savedDurations = JSON.parse(localStorage.getItem('hameed_durations')) || {};
         let currentPlayingId = null;
-        let playerInstance = null; // لتخزين كائن المشغل
+        let playerInstance = null; 
 
-        // --- إدارة الدخول ---
         function checkLogin() {
             if(document.getElementById('passwordInput').value === PASSWORD) {
                 localStorage.setItem('hameed_loggedIn', 'true');
@@ -226,17 +222,12 @@
         }
         function logout() { localStorage.removeItem('hameed_loggedIn'); location.reload(); }
 
-        // --- تحميل البيانات ---
         async function loadData() {
             try {
-                if(BUNNY_API_KEY && BUNNY_LIBRARY_ID) {
-                    document.getElementById('apiFetcherArea').classList.remove('hidden');
-                }
-
+                if(BUNNY_API_KEY && BUNNY_LIBRARY_ID) document.getElementById('apiFetcherArea').classList.remove('hidden');
                 const response = await fetch('data.json');
                 if(!response.ok) throw new Error();
                 const raw = await response.json();
-                
                 allData = raw.teachers.map((t, ti) => ({
                     ...t, classes: t.classes.map((c, ci) => ({
                         ...c, lectures: c.lectures.map((l, li) => ({
@@ -244,7 +235,6 @@
                         }))
                     }))
                 }));
-
                 document.getElementById('loadingText').classList.add('hidden');
                 renderApp(allData);
                 updateStats();
@@ -252,13 +242,11 @@
                 checkLastWatched();
                 updateDateTime();
                 setupCountdown();
-                
             } catch(e) {
                 document.getElementById('loadingText').innerHTML = "فشل تحميل الملف (data.json)";
             }
         }
 
-        // --- دوال الوقت والتاريخ ---
         function updateDateTime() {
             const today = new Date();
             document.getElementById('dateDisplay').innerText = today.toLocaleDateString('ar-IQ', {weekday:'long', day:'numeric', month:'long'});
@@ -270,12 +258,10 @@
             const now = new Date();
             const targetYear = now.getMonth() < 1 ? now.getFullYear() : now.getFullYear() + 1;
             const targetDate = new Date(targetYear, 0, 20);
-            
             if (targetDate.getTime() < now.getTime()) {
                 countdownElement.innerHTML = '<span class="text-lg font-bold">🎉 خلصت! بالتوفيق!</span>';
                 return;
             }
-
             function updateCountdown() {
                 const now = new Date().getTime();
                 const distance = targetDate.getTime() - now;
@@ -283,18 +269,16 @@
                 const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
                 if (distance < 0) {
                     clearInterval(countdownInterval);
                     countdownElement.innerHTML = '<span class="text-lg font-bold">🎉 خلصت! بالتوفيق!</span>';
                     return;
                 }
-
                 countdownElement.innerHTML = `
-                    <div class="countdown-segment"><span class="text-2xl font-black">${days}</span><span class="text-xs">يوم</span></div>
-                    <div class="countdown-segment"><span class="text-2xl font-black">${hours < 10 ? '0' + hours : hours}</span><span class="text-xs">ساعة</span></div>
-                    <div class="countdown-segment"><span class="text-2xl font-black">${minutes < 10 ? '0' + minutes : minutes}</span><span class="text-xs">دقيقة</span></div>
-                    <div class="countdown-segment"><span class="text-2xl font-black">${seconds < 10 ? '0' + seconds : seconds}</span><span class="text-xs">ثانية</span></div>
+                    <div class="countdown-segment"><span class="text-xl md:text-2xl font-black">${days}</span><span class="text-[10px]">يوم</span></div>
+                    <div class="countdown-segment"><span class="text-xl md:text-2xl font-black">${hours < 10 ? '0' + hours : hours}</span><span class="text-[10px]">ساعة</span></div>
+                    <div class="countdown-segment"><span class="text-xl md:text-2xl font-black">${minutes < 10 ? '0' + minutes : minutes}</span><span class="text-[10px]">دقيقة</span></div>
+                    <div class="countdown-segment"><span class="text-xl md:text-2xl font-black">${seconds < 10 ? '0' + seconds : seconds}</span><span class="text-[10px]">ثانية</span></div>
                 `;
             }
             const countdownInterval = setInterval(updateCountdown, 1000);
@@ -322,16 +306,11 @@
         }
 
         async function fetchAllDurationsFromAPI() {
-            if (!BUNNY_API_KEY || !BUNNY_LIBRARY_ID) {
-                alert("يرجى إضافة API Key و Library ID في كود الصفحة أولاً.");
-                return;
-            }
-            
+            if (!BUNNY_API_KEY || !BUNNY_LIBRARY_ID) { alert("أضف API Key!"); return; }
             const btn = document.querySelector('#apiFetcherArea button');
             const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التحميل...';
             btn.disabled = true;
-
             try {
                 for (const teacher of allData) {
                     for (const cls of teacher.classes) {
@@ -342,16 +321,11 @@
                                     try {
                                         const res = await fetch(`https://video.bunnycdn.com/library/${BUNNY_LIBRARY_ID}/videos/${videoId}`, {
                                             method: 'GET',
-                                            headers: {
-                                                'AccessKey': BUNNY_API_KEY,
-                                                'Accept': 'application/json'
-                                            }
+                                            headers: { 'AccessKey': BUNNY_API_KEY, 'Accept': 'application/json' }
                                         });
                                         if (res.ok) {
                                             const data = await res.json();
-                                            if (data.length) {
-                                                saveDuration(lec.id, data.length);
-                                            }
+                                            if (data.length) saveDuration(lec.id, data.length);
                                         }
                                     } catch (err) { console.error(err); }
                                 }
@@ -359,10 +333,8 @@
                         }
                     }
                 }
-                alert("تم تحديث الأوقات بنجاح!");
-            } catch (error) {
-                alert("حدث خطأ أثناء الاتصال بـ API");
-            }
+                alert("تم التحديث!");
+            } catch (error) { alert("خطأ API"); }
             btn.innerHTML = originalText;
             btn.disabled = false;
         }
@@ -377,7 +349,6 @@
             }
         }
 
-        // --- الرسم (Rendering) ---
         function renderApp(data) {
             const container = document.getElementById('dynamicListContainer');
             container.innerHTML = '';
@@ -392,46 +363,56 @@
                         const isDone = completedLectures.includes(lec.id);
                         const duration = savedDurations[lec.id] || '--:--'; 
                         const thumbUrl = getThumbnailUrl(lec.url);
+                        // هنا التغيير: استخدام Grid داخل عرض المحاضرات لتوزيعها بالعرض
                         lecsHtml += `
-                            <div id="row_${lec.id}" class="lecture-item ${isDone ? 'completed' : ''} flex gap-3 p-3 mb-3 bg-white rounded-xl border border-slate-100 hover:shadow-lg transition-all duration-300">
-                                <div class="relative w-32 h-20 flex-shrink-0 cursor-pointer rounded-lg overflow-hidden group" onclick="openPlayer('${lec.title.replace(/'/g, "\\'")}', '${lec.url}', '${lec.id}')">
-                                    <img src="${thumbUrl}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 bg-slate-200" onerror="this.src='https://via.placeholder.com/150?text=No+Img'">
+                            <div id="row_${lec.id}" class="lecture-item ${isDone ? 'completed' : ''} group bg-white rounded-2xl border border-slate-100 hover:border-brand-300 hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col">
+                                <div class="relative aspect-video cursor-pointer overflow-hidden" onclick="openPlayer('${lec.title.replace(/'/g, "\\'")}', '${lec.url}', '${lec.id}')">
+                                    <img src="${thumbUrl}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 bg-slate-200" onerror="this.src='https://via.placeholder.com/300x170?text=No+Img'">
                                     <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-                                        <div class="w-8 h-8 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center text-white scale-90 group-hover:scale-110 transition-transform"><i class="fa-solid fa-play text-xs pl-0.5"></i></div>
+                                        <div class="w-12 h-12 rounded-full bg-white/30 backdrop-blur-md flex items-center justify-center text-white scale-90 group-hover:scale-110 transition-transform shadow-lg"><i class="fa-solid fa-play pl-1"></i></div>
                                     </div>
-                                    <div class="absolute bottom-1 left-1 bg-black/60 backdrop-blur-md px-1.5 rounded text-[9px] text-white font-bold dir-ltr font-mono">
-                                        <i class="fa-regular fa-clock text-[8px] mr-1"></i><span id="dur_img_${lec.id}">${duration}</span>
+                                    <div class="absolute bottom-2 left-2 bg-black/70 backdrop-blur-sm px-2 py-0.5 rounded-md text-[10px] text-white font-bold dir-ltr font-mono flex items-center gap-1">
+                                        <i class="fa-regular fa-clock text-[9px]"></i><span id="dur_img_${lec.id}">${duration}</span>
                                     </div>
+                                    ${isDone ? '<div class="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-md font-bold shadow-sm"><i class="fa-solid fa-check ml-1"></i> مكتمل</div>' : ''}
                                 </div>
-                                <div class="flex flex-col justify-between flex-1 py-0.5">
-                                    <div>
-                                        <div class="flex justify-between items-start">
-                                            <h3 class="lec-title text-sm font-bold text-slate-800 leading-snug mb-1 line-clamp-2">${lec.title}</h3>
-                                            <button onclick="toggleComplete('${lec.id}')" class="status-btn w-6 h-6 rounded-full border-2 border-slate-200 flex items-center justify-center transition-all ${isDone ? 'bg-green-500 border-green-500 text-white' : 'text-transparent hover:border-brand-300'}"><i class="fa-solid fa-check text-xs"></i></button>
-                                        </div>
-                                        ${lec.description ? `<p class="text-[10px] text-slate-400 line-clamp-1">${lec.description}</p>` : ''}
-                                    </div>
-                                    <div class="flex items-center gap-2 mt-auto">
-                                        <span class="text-[9px] bg-slate-50 text-slate-400 px-2 py-0.5 rounded border border-slate-100">فيديو مسجل</span>
+                                <div class="p-4 flex flex-col flex-1">
+                                    <h3 class="lec-title text-base font-bold text-slate-800 leading-snug mb-2 line-clamp-2" title="${lec.title}">${lec.title}</h3>
+                                    ${lec.description ? `<p class="text-xs text-slate-400 line-clamp-2 mb-3">${lec.description}</p>` : ''}
+                                    <div class="mt-auto flex justify-between items-center pt-3 border-t border-slate-50">
+                                        <span class="text-[10px] bg-slate-50 text-slate-400 px-2 py-1 rounded border border-slate-100">فيديو مسجل</span>
+                                        <button onclick="toggleComplete('${lec.id}')" class="status-btn text-xs font-bold text-slate-400 hover:text-brand-600 transition-colors">
+                                            ${isDone ? 'تراجع' : 'تحديد كمنجز'}
+                                        </button>
                                     </div>
                                 </div>
                             </div>`;
                     });
+                    
+                    // استخدام Grid Columns هنا لتوزيع الكروت
                     classesHtml += `
-                        <details class="group mb-4" ${ci === 0 ? 'open' : ''}>
-                            <summary class="flex items-center justify-between p-3 bg-white rounded-xl cursor-pointer list-none font-bold text-slate-700 text-sm select-none shadow-sm mb-2 border border-slate-100/50 hover:bg-slate-50 transition-colors">
-                                <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span>${cls.name}</span>
-                                <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform group-open:rotate-180"></i>
+                        <details class="group mb-6 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" ${ci === 0 ? 'open' : ''}>
+                            <summary class="flex items-center justify-between p-5 cursor-pointer list-none bg-slate-50/50 hover:bg-slate-50 transition-colors select-none">
+                                <span class="flex items-center gap-3">
+                                    <span class="w-2 h-8 rounded-full bg-brand-500"></span>
+                                    <span class="font-black text-lg text-slate-700">${cls.name}</span>
+                                    <span class="text-xs font-medium bg-white px-2 py-1 rounded-md border border-slate-200 text-slate-400">${cls.lectures.length} محاضرات</span>
+                                </span>
+                                <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300 group-open:rotate-180"></i>
                             </summary>
-                            <div class="pt-1 px-1">${lecsHtml}</div>
+                            <div class="p-5 bg-white border-t border-slate-100">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                                    ${lecsHtml}
+                                </div>
+                            </div>
                         </details>`;
                 });
                 section.innerHTML = `
-                    <div class="flex items-center gap-4 mb-4 mt-2 px-1">
-                        <img src="${teacher.image}" class="w-14 h-14 rounded-2xl bg-white p-1 object-cover shadow-sm border border-slate-100">
+                    <div class="flex items-center gap-5 mb-6 px-2">
+                        <img src="${teacher.image}" class="w-20 h-20 rounded-2xl bg-white p-1 object-cover shadow-md border border-slate-100">
                         <div>
-                            <h2 class="font-black text-lg text-slate-800">${teacher.name}</h2>
-                            <span class="text-[10px] bg-brand-50 text-brand-600 px-2.5 py-1 rounded-full font-bold border border-brand-100">${teacher.subject}</span>
+                            <h2 class="font-black text-2xl text-slate-800 mb-1">${teacher.name}</h2>
+                            <span class="inline-block text-xs bg-brand-50 text-brand-600 px-3 py-1.5 rounded-lg font-bold border border-brand-100">${teacher.subject}</span>
                         </div>
                     </div>
                     ${classesHtml}`;
@@ -441,27 +422,22 @@
 
         function toggleComplete(id) {
             const row = document.getElementById(`row_${id}`);
-            const btn = row ? row.querySelector('.status-btn') : null;
             if (completedLectures.includes(id)) {
                 completedLectures = completedLectures.filter(i => i !== id);
-                if(row) row.classList.remove('completed');
-                if(btn) btn.className = "status-btn w-6 h-6 rounded-full border-2 border-slate-200 flex items-center justify-center transition-all text-transparent hover:border-brand-300";
+                renderApp(allData); // Re-render to update UI properly
             } else {
                 completedLectures.push(id);
-                if(row) row.classList.add('completed');
-                if(btn) btn.className = "status-btn w-6 h-6 rounded-full border-2 border-green-500 bg-green-500 flex items-center justify-center transition-all text-white";
                 triggerConfetti();
+                renderApp(allData);
             }
             localStorage.setItem('hameed_completed_v3', JSON.stringify(completedLectures));
             updateStats();
             updateSmartSchedule();
         }
 
-        // --- الفيديو والذاكرة (باستخدام Player.js) ---
         function openPlayer(title, url, id) {
             if(!url || url === '#') { alert('ماكو رابط!'); return; }
             currentPlayingId = id;
-            
             let finalUrl = url;
             if (!finalUrl.includes('?')) finalUrl += '?context=true';
             else finalUrl += '&context=true';
@@ -479,20 +455,14 @@
                     const iframe = document.getElementById('activeFrame');
                     if(iframe && window.playerjs) {
                         playerInstance = new playerjs.Player(iframe);
-                        
                         playerInstance.on('ready', () => {
-                            playerInstance.getDuration((d) => {
-                                if(d > 0) saveDuration(currentPlayingId, d);
-                            });
+                            playerInstance.getDuration((d) => { if(d > 0) saveDuration(currentPlayingId, d); });
                         });
-                        
                         playerInstance.on('timeupdate', (data) => {
                             if(data.duration > 0) saveDuration(currentPlayingId, data.duration);
                         });
                     }
-                } catch(err) {
-                    console.log("PlayerJS Error:", err);
-                }
+                } catch(err) { console.log("PlayerJS Error:", err); }
             }, 500);
 
             const btn = document.getElementById('markCompleteBtn');
@@ -509,10 +479,7 @@
         }
 
         function closeVideoModal() {
-            if(playerInstance) {
-                try { playerInstance.off('ready'); playerInstance.off('timeupdate'); } catch(e){}
-                playerInstance = null;
-            }
+            if(playerInstance) { try { playerInstance.off('ready'); playerInstance.off('timeupdate'); } catch(e){} playerInstance = null; }
             const modal = document.getElementById('videoModal');
             modal.classList.add('opacity-0');
             setTimeout(()=>{
@@ -553,22 +520,21 @@
                 if (!completedLectures.includes(l.id)) pendingLectures.push({ title: l.title, id: l.id });
             })));
             if (pendingLectures.length === 0) { card.classList.add('hidden'); return; }
-            const nextUp = pendingLectures.slice(0, 2);
+            const nextUp = pendingLectures.slice(0, 4); // Show more items on desktop
             let currentTime = new Date();
             currentTime.setMinutes(currentTime.getMinutes() + 10);
             let html = '';
             nextUp.forEach((lec, index) => {
                 const timeString = currentTime.toLocaleTimeString('ar-IQ', { hour: 'numeric', minute: '2-digit' });
                 html += `
-                    <div class="flex items-center justify-between bg-white/5 p-3 rounded-xl hover:bg-white/10 transition-colors border border-white/5">
+                    <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl hover:bg-slate-100 transition-colors border border-slate-100">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-brand-500/20 flex items-center justify-center text-brand-300 font-bold text-xs border border-brand-500/30">${index + 1}</div>
-                            <div>
-                                <p class="font-bold text-sm line-clamp-1">${lec.title}</p>
-                                <p class="text-[10px] text-brand-300">وقت البدء المقترح: <span class="text-white font-bold dir-ltr">${timeString}</span></p>
+                            <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-brand-600 font-bold text-xs border border-slate-200 shadow-sm">${index + 1}</div>
+                            <div class="min-w-0">
+                                <p class="font-bold text-sm text-slate-800 line-clamp-1">${lec.title}</p>
+                                <p class="text-[10px] text-slate-400">ابدأ الساعة: <span class="text-slate-600 font-bold dir-ltr">${timeString}</span></p>
                             </div>
                         </div>
-                        ${index === 0 ? '<span class="text-[10px] bg-red-500 px-2 py-0.5 rounded text-white animate-pulse">التالي</span>' : ''}
                     </div>`;
                 currentTime.setHours(currentTime.getHours() + 1);
             });

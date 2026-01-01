@@ -4,6 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>منصة حميد | شاشة كاملة</title>
+    
+    <script>
+        (function() {
+            // رسالة الحظر التي طلبتها
+            const banMessage = `
+                <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:#000; color:#ff0000; z-index:99999999; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; font-family: 'Tajawal', sans-serif;">
+                    <h1 style="font-size:4rem; margin-bottom:20px;">🚫 تم كشفك!</h1>
+                    <p style="font-size:2rem; font-weight:bold; color:#fff;">طفي خيارات المطور وتعال ارجع للموقع ولا تصير غبي.</p>
+                    <button onclick="location.reload()" style="margin-top:30px; padding:15px 40px; background:#ff0000; color:white; border:none; font-size:1.5rem; border-radius:10px; cursor:pointer;">أنا آسف، أعد التحميل</button>
+                </div>
+            `;
+
+            // دالة تفعيل الحظر
+            function triggerBan() {
+                document.body.innerHTML = banMessage;
+                // إيقاف أي سكربتات أخرى
+                window.stop();
+                throw new Error("Security Violation: DevTools Detected!");
+            }
+
+            // 1. منع الزر الأيمن
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
+
+            // 2. منع اختصارات الكيبورد المعروفة للمطورين
+            document.addEventListener('keydown', function(e) {
+                if (
+                    e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
+                    (e.ctrlKey && e.key === 'U') ||
+                    (e.ctrlKey && e.key === 'S')
+                ) {
+                    e.preventDefault();
+                    triggerBan();
+                }
+            });
+
+            // 3. فخ الـ Debugger (يكتشف إذا كان الكونسول مفتوحاً)
+            // هذه التقنية تقوم بتجميد المتصفح إذا حاول شخص تتبع الكود
+            setInterval(function() {
+                const startTime = performance.now();
+                // هذا الأمر سيوقف التنفيذ فقط إذا كانت أدوات المطور مفتوحة
+                debugger; 
+                const endTime = performance.now();
+                
+                // إذا كان الفرق في الوقت كبيراً، فهذا يعني أن المتصفح توقف عند نقطة debugger
+                // مما يعني أن أدوات المطور مفتوحة
+                if (endTime - startTime > 100) {
+                    triggerBan();
+                }
+            }, 1000);
+
+            // 4. مراقبة تغيير حجم الشاشة (في حال فتح الكونسول جانباً)
+            window.addEventListener('resize', function() {
+                // التحقق من الفرق بين العرض الخارجي والداخلي
+                const threshold = 160;
+                if ((window.outerWidth - window.innerWidth > threshold) || (window.outerHeight - window.innerHeight > threshold)) {
+                    // تحذير: قد يؤثر هذا على بعض الإضافات، لكنه فعال ضد الكونسول الجانبي
+                   // triggerBan(); // تم تعطيله مؤقتاً لتجنب إزعاج المستخدمين العاديين، يمكنك تفعيله بحذف علامة //
+                }
+            });
+
+            // 5. محاولة مسح الكونسول باستمرار لمنع قراءة أي سجلات
+            setInterval(function() {
+                console.clear();
+                console.log("%cممنوع الدخول هنا يا ذكي 😉", "color: red; font-size: 20px; font-weight: bold;");
+            }, 1000);
+
+        })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://assets.mediadelivery.net/playerjs/player-0.1.0.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
@@ -24,7 +95,15 @@
     </script>
 
     <style>
-        body { background: #f8fafc; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
+        /* منع تحديد النصوص لزيادة صعوبة النسخ */
+        body { 
+            background: #f8fafc; 
+            -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; 
+            user-select: none; /* حماية إضافية: منع التظليل */
+            -webkit-user-select: none;
+        }
+        
         .animate-enter { animation: slideInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; opacity: 0; }
         @keyframes slideInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -363,7 +442,6 @@
                         const isDone = completedLectures.includes(lec.id);
                         const duration = savedDurations[lec.id] || '--:--'; 
                         const thumbUrl = getThumbnailUrl(lec.url);
-                        // هنا التغيير: استخدام Grid داخل عرض المحاضرات لتوزيعها بالعرض
                         lecsHtml += `
                             <div id="row_${lec.id}" class="lecture-item ${isDone ? 'completed' : ''} group bg-white rounded-2xl border border-slate-100 hover:border-brand-300 hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col">
                                 <div class="relative aspect-video cursor-pointer overflow-hidden" onclick="openPlayer('${lec.title.replace(/'/g, "\\'")}', '${lec.url}', '${lec.id}')">
@@ -389,7 +467,6 @@
                             </div>`;
                     });
                     
-                    // استخدام Grid Columns هنا لتوزيع الكروت
                     classesHtml += `
                         <details class="group mb-6 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" ${ci === 0 ? 'open' : ''}>
                             <summary class="flex items-center justify-between p-5 cursor-pointer list-none bg-slate-50/50 hover:bg-slate-50 transition-colors select-none">
@@ -424,7 +501,7 @@
             const row = document.getElementById(`row_${id}`);
             if (completedLectures.includes(id)) {
                 completedLectures = completedLectures.filter(i => i !== id);
-                renderApp(allData); // Re-render to update UI properly
+                renderApp(allData); 
             } else {
                 completedLectures.push(id);
                 triggerConfetti();
@@ -520,7 +597,7 @@
                 if (!completedLectures.includes(l.id)) pendingLectures.push({ title: l.title, id: l.id });
             })));
             if (pendingLectures.length === 0) { card.classList.add('hidden'); return; }
-            const nextUp = pendingLectures.slice(0, 4); // Show more items on desktop
+            const nextUp = pendingLectures.slice(0, 4); 
             let currentTime = new Date();
             currentTime.setMinutes(currentTime.getMinutes() + 10);
             let html = '';

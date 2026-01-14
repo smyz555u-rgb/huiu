@@ -45,6 +45,59 @@
           ]
         }
       ]
+    },
+    {
+      "id": 4,
+      "name": "أ. حيدر وليد",
+      "subject": "الرياضيات",
+      "image": "https://example.com/haider-waleed.jpg",
+      "classes": [
+        {
+          "name": "الفصل الثالث",
+          "lectures": [
+            { "title": "محاضرة 1", "url": "https://iframe.mediadelivery.net/embed/579996/b8f16b1e-05ed-4b0f-a4f4-e2bc633a5da8", "description": "محاضرة 1" },
+            { "title": "محاضرة 2", "url": "https://iframe.mediadelivery.net/embed/579996/4c837298-055d-4e71-8992-529494f8e35b", "description": "محاضرة 2" },
+            { "title": "محاضرة 3 الجزء الثاني", "url": "https://iframe.mediadelivery.net/embed/579996/21df63c5-a6b8-4175-bd68-6084dfda8462", "description": "محاضرة 3 الجزء الثاني" },
+            { "title": "محاضرة 3 الجزء الأول", "url": "https://iframe.mediadelivery.net/embed/579996/2c1e26eb-be6d-4d78-b476-a27729fb2a85", "description": "محاضرة 3 الجزء الأول" },
+            { "title": "محاضرة 4 الجزء الثاني", "url": "https://iframe.mediadelivery.net/embed/579996/0d86ccfa-f3d0-4100-b8aa-acb4201e043b", "description": "محاضرة 4 الجزء الثاني" },
+            { "title": "محاضرة 4 الجزء الأول", "url": "https://iframe.mediadelivery.net/embed/579996/4a3b0941-7195-4e2e-a016-fec275a77e39", "description": "محاضرة 4 الجزء الأول" },
+            { "title": "محاضرة 5", "url": "https://iframe.mediadelivery.net/embed/579996/b733470c-4e48-4233-aac8-588dbed273da", "description": "محاضرة 5" },
+            { "title": "محاضرة 6 الجزء الثاني", "url": "https://iframe.mediadelivery.net/embed/579996/e1d58b8d-8dec-4cf2-87ee-44c71161ac02", "description": "محاضرة 6 الجزء الثاني" },
+            { "title": "محاضرة 6 الجزء الأول", "url": "https://iframe.mediadelivery.net/embed/579996/0fda7a43-f506-4af8-8275-49080609bab1", "description": "محاضرة 6 الجزء الأول" },
+            { "title": "محاضرة 7 الجزء الثاني", "url": "https://iframe.mediadelivery.net/embed/579996/25855f21-2cf5-493e-a118-26229fc4603a", "description": "محاضرة 7 الجزء الثاني" },
+            { "title": "محاضرة 7 الجزء الأول", "url": "https://iframe.mediadelivery.net/embed/579996/89b7e9ad-38e7-4a43-a67f-4f10efa3e36f", "description": "محاضرة 7 الجزء الأول" },
+            { "title": "محاضرة 8 الجزء الثاني", "url": "https://iframe.mediadelivery.net/embed/579996/eebab633-f384-43b7-91ee-480da7b0ad41", "description": "محاضرة 8 الجزء الثاني" },
+            { "title": "محاضرة 8 الجزء الأول", "url": "https://iframe.mediadelivery.net/embed/579996/a546ae4c-d3b3-4cae-b14c-1406ec4a5946", "description": "محاضرة 8 الجزء الأول" },
+            { "title": "محاضرة 9", "url": "https://iframe.mediadelivery.net/embed/579996/f75be37f-66ca-4050-b1e6-00f32a8c7724", "description": "محاضرة 9" },
+            { "title": "محاضرة 10 الجزء الثاني", "url": "https://iframe.mediadelivery.net/embed/579996/858df411-9231-4f8f-aef8-249d27fddbf3", "description": "محاضرة 10 الجزء الثاني" },
+            { "title": "محاضرة 10 الجزء الأول", "url": "https://iframe.mediadelivery.net/embed/579996/d27683d6-8087-4938-83e7-fd09a215a673", "description": "محاضرة 10 الجزء الأول" },
+            { "title": "محاضرة 11 الجزء الثاني", "url": "https://iframe.mediadelivery.net/embed/579996/52efc1e9-8850-4b94-be5d-b1ba1bc46393", "description": "محاضرة 11 الجزء الثاني" },
+            { "title": "محاضرة 11 جزء أول", "url": "https://iframe.mediadelivery.net/embed/579996/c76235dd-e4c6-41a3-b034-764085895511", "description": "محاضرة 11 جزء أول" },
+            { "title": "محاضرة 12", "url": "https://iframe.mediadelivery.net/embed/579996/2715dbef-16b3-4910-b208-51da9959417b", "description": "محاضرة 12" },
+            { "title": "محاضرة 13", "url": "https://iframe.mediadelivery.net/embed/579996/97517576-f51d-4941-a537-3b60e4f69a0a", "description": "محاضرة 13" },
+            { "title": "محاضرة 14 الجزء الثاني", "url": "https://iframe.mediadelivery.net/embed/579996/92f0e7e3-c531-4141-9619-548311fca355", "description": "محاضرة 14 الجزء الثاني" },
+            { "title": "محاضرة 14 الجزء الأول", "url": "https://iframe.mediadelivery.net/embed/579996/dcdebfd5-2c6f-4bff-8258-5a6f5c5fcf9f", "description": "محاضرة 14 الجزء الأول" },
+            { "title": "محاضرة 15 جزء ثاني", "url": "https://iframe.mediadelivery.net/embed/579996/2ad8c4fc-f8a9-4d41-ab43-6e28b34b1503", "description": "محاضرة 15 جزء ثاني" },
+            { "title": "محاضرة 15 جزء أول", "url": "https://iframe.mediadelivery.net/embed/579996/75bce9e9-cb23-49b3-b32f-2f9cec791645", "description": "محاضرة 15 جزء أول" },
+            { "title": "محاضرة 16 جزء أول", "url": "https://iframe.mediadelivery.net/embed/579996/c26fb638-824f-462f-88fc-d2e052430aa0", "description": "محاضرة 16 جزء أول" },
+            { "title": "محاضرة 17", "url": "https://iframe.mediadelivery.net/embed/579996/7157c655-76f5-47d6-80bd-d010b2a3bf75", "description": "محاضرة 17" },
+            { "title": "محاضرة 18 الجزء ثاني", "url": "https://iframe.mediadelivery.net/embed/579996/a9c3d9ee-dfe1-47f8-b52a-f92a24c90450", "description": "محاضرة 18 الجزء ثاني" },
+            { "title": "محاضرة 18 الجزء الأول", "url": "https://iframe.mediadelivery.net/embed/579996/0169d5ae-8afc-40ad-9865-1c6ba792134b", "description": "محاضرة 18 الجزء الأول" },
+            { "title": "محاضرة 19", "url": "https://iframe.mediadelivery.net/embed/579996/2eedf142-1f66-4a23-b19e-8ddebed4bb6d", "description": "محاضرة 19" },
+            { "title": "محاضرة 20", "url": "https://iframe.mediadelivery.net/embed/579996/3647f473-590a-43dd-a13a-316bdedd482b", "description": "محاضرة 20" },
+            { "title": "محاضرة 21", "url": "https://iframe.mediadelivery.net/embed/579996/b7aab8f1-9ce1-436f-bea5-8c05b4158c81", "description": "محاضرة 21" },
+            { "title": "محاضرة 22", "url": "https://iframe.mediadelivery.net/embed/579996/66dc8c32-8b8d-4a8d-b5c2-35b0137014a4", "description": "محاضرة 22" },
+            { "title": "محاضرة 23 الجزء الثاني", "url": "https://iframe.mediadelivery.net/embed/579996/5e28f202-643d-40b8-991f-d0f0e8c60da4", "description": "محاضرة 23 الجزء الثاني" },
+            { "title": "محاضرة 23 الجزء الأول", "url": "https://iframe.mediadelivery.net/embed/579996/3df7b5c3-282d-4b3f-9640-5614eeadda69", "description": "محاضرة 23 الجزء الأول" },
+            { "title": "محاضرة 24 الجزء الثاني", "url": "https://iframe.mediadelivery.net/embed/579996/47b41aaa-38f1-4008-880f-b9ea8604b895", "description": "محاضرة 24 الجزء الثاني" },
+            { "title": "محاضرة 24 الجزء الأول", "url": "https://iframe.mediadelivery.net/embed/579996/27f5ee98-d2db-4692-a0a1-094092498759", "description": "محاضرة 24 الجزء الأول" },
+            { "title": "محاضرة 25", "url": "https://iframe.mediadelivery.net/embed/579996/76ce7817-53a0-4ccd-a0d3-59eb56f2c5b3", "description": "محاضرة 25" },
+            { "title": "محاضرة 26", "url": "https://iframe.mediadelivery.net/embed/579996/ff2295d9-727a-46d9-9be2-e38877b257fa", "description": "محاضرة 26" },
+            { "title": "محاضرة 26 الجزء الأول", "url": "https://iframe.mediadelivery.net/embed/579996/0bcf0ea8-9c94-494f-bdf1-727f3d1c87da", "description": "محاضرة 26 الجزء الأول" },
+            { "title": "شرح قوانين للأشكال الهندسية", "url": "https://iframe.mediadelivery.net/embed/579996/ead2905f-5e4b-46a1-a472-f23e42e5012f", "description": "شرح قوانين للأشكال الهندسية" }
+          ]
+        }
+      ]
     }
   ]
 }
